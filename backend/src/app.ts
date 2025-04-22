@@ -3,12 +3,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { createAuthRouter } from "./routes/auth";
 import { SpotifyService } from "./services/spotify";
+import { securityMiddleware } from "./middleware/security";
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-app.use(express.json());
 
 const spotifyService = new SpotifyService(
     process.env.SPOTIFY_CLIENT_ID as string,
@@ -16,17 +16,23 @@ const spotifyService = new SpotifyService(
     `${process.env.BASE_URL}/api/auth/spotify/callback`
 )
 
-app.use(createAuthRouter(spotifyService));
+app.use(securityMiddleware);
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
+app.use(express.json());
 
 app.use("/api/auth", createAuthRouter(spotifyService));
 
 app.get("/", (req, res) => {
     res.json({
-        "text": "butts"
+        "text": "hello world"
     })
 })
 
 
-app.listen(port, () => console.log(`butts`))
+app.listen(port, () => console.log(`live on port ${port}`))

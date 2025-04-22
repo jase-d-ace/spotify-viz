@@ -7,9 +7,9 @@ export function createAuthRouter(spotifyService: SpotifyService) {
     const router = Router();
     const authController = new AuthController(spotifyService);
 
-    router.get("/spotify", authController.getAuthUrl);
-    router.get("/spotify/callback", authController.handleCallback);
-    router.get("/spotify/refresh", authController.refreshAccessToken);
+    router.get("/spotify", authController.getAuthUrl.bind(authController));
+    router.get("/spotify/callback", authController.handleCallback.bind(authController));
+    router.get("/spotify/refresh", authController.refreshAccessToken.bind(authController));
 
     return router;
 }
