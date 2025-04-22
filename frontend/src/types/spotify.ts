@@ -42,10 +42,8 @@ export interface SpotifyTrack {
     id: string;
     name: string;
     artists: SpotifyArtist[];
-    album: SpotifyAlbum;
     duration: number;
     preview_url: string;
-    analysis_result: AudioAnalysis;
 }
 
 export interface SpotifyArtist {
@@ -55,20 +53,6 @@ export interface SpotifyArtist {
     images: SpotifyImage[];
 }
 
-export interface SpotifyAlbum {
-    id: string;
-    name: string;
-    genres: string[];
-    images: SpotifyImage[];
-    artists: SpotifyArtist[];
-}
-
-export interface AudioAnalysis {
-    id: string;
-    tempo: number;
-    energy: number;
-    danceability: number;
-}
 
 export interface PlaylistAnalysis {
     average_tempo: number;
