@@ -1,15 +1,14 @@
 import { SpotifyUser } from "./spotify";
 
-export interface AuthConfig {
-    clientId: string;
-    clientSecret: string;
-    redirectUri: string;
-    scopes: string[];
+export interface AuthTokens {
+    accessToken: string;
+    refreshToken: string;
+    expires_in: number;
 }
 
-export interface SessionUser {
-    access_token: string;
-    refresh_token: string;
-    expires_at: number;
-    user: SpotifyUser;
+export interface AuthState {
+    isAuthenticated: boolean;
+    user: SpotifyUser | null;
+    tokens: AuthTokens | null;
+    error?: string | null;
 }
