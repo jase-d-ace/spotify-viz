@@ -15,7 +15,8 @@ export class AuthController {
         const { accessToken, refreshToken, expires_in } = await this.spotifyService.getTokens(code as string);
         this.spotifyService.setAccessToken(accessToken);
         this.spotifyService.setRefreshToken(refreshToken);
-        res.json({ accessToken, refreshToken, expires_in });
+        console.log("handling callback", accessToken, refreshToken, expires_in);
+        res.redirect(`${process.env.FRONTEND_URL}/callback?accessToken=${accessToken}`);
     }
 
     async refreshAccessToken(req: Request, res: Response) {

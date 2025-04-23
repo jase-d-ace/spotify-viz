@@ -5,11 +5,12 @@ export const securityMiddleware = (req: Request, res: Response, next: NextFuncti
     res.setHeader(
         'Content-Security-Policy',
         "default-src 'self'; " +
-        "script-src 'self' 'unsafe-inline' https://*.spotify.com; " +
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.spotify.com; " +
         "style-src 'self' 'unsafe-inline'; " +
         "img-src 'self' data: https://*.spotify.com; " +
-        "connect-src 'self' https://*.spotify.com; " +
-        "frame-src 'self' https://*.spotify.com;"
+        "connect-src 'self' https://*.spotify.com http://127.0.0.1:5173 http://localhost:5173; " +
+        "frame-src 'self' https://*.spotify.com; " +
+        "form-action 'self' https://*.spotify.com;"
     );
 
     // Set other security headers

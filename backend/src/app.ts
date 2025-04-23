@@ -13,7 +13,7 @@ const port = process.env.PORT || 3000;
 const spotifyService = new SpotifyService(
     process.env.SPOTIFY_CLIENT_ID as string,
     process.env.SPOTIFY_CLIENT_SECRET as string,
-    `${process.env.BASE_URL}/api/auth/spotify/callback`
+    process.env.SPOTIFY_REDIRECT_URI as string
 )
 
 app.use(securityMiddleware);
