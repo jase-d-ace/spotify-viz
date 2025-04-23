@@ -1,5 +1,4 @@
 import { AuthTokens, AuthState } from "../types/auth";
-import { SpotifyUser } from "../types/spotify";
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export class AuthService {
@@ -7,7 +6,7 @@ export class AuthService {
         try {
             const response = await fetch(`http://localhost:3000/api/auth/spotify`, {
                 method: 'GET',
-                withCredentials: true,
+                credentials: "include",
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -21,30 +20,33 @@ export class AuthService {
         }
     }
 
-    async handleCallback(code: string): Promise<AuthState> {
-        try {
-            const response = await fetch(`http://localhost:3000/api/auth/spotify/callback?code=${code}`);
-            const json = await response.json();
-            console.log("json:", json);
-            return {
-                isAuthenticated: true,
-                user: json.user as SpotifyUser,
-                tokens: json.tokens,
-            }
-        } catch (e) {
-            console.error("Error handling callback:", e);
-            return {
-                isAuthenticated: false,
-                user: null,
-                tokens: null,
-                error: "Failed to authenticate",
-            }
-        }
+    async handleCallback(code: string) {
+
+        const res = await fetch(`http://localhost:3000/api/auth/spotify/me`, {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${code}`,
+            },
+            body: JSON.stringify({
+                code
+            })
+        });
+        const json = await res.json();
+        console.log("json", json);
+        return json;
     }
 
     async refreshAccessToken(): Promise<AuthTokens> {
         try {
-            const response = await fetch(`${BASE_URL}/api/auth/spotify/refresh`);
+            const response = await fetch(`${BASE_URL}/api/auth/spotify/refresh`, {
+                method: 'GET',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
             const json = await response.json();
             return json.tokens;
         } catch (e) {

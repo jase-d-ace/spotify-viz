@@ -1,14 +1,14 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { AuthService } from '../services/auth';
 import { AuthState, AuthTokens } from '../types/auth';
 interface AuthContextType {
     state: AuthState;
     login: () => Promise<void>;
     logout: () => void;
-    handleCallback: (code: string) => Promise<void>;
+    handleCallback: (tokens: AuthTokens) => void;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>({
+const AuthContext = createContext<AuthContextType>({
     state: {
         isAuthenticated: false,
         user: null,
@@ -28,14 +28,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         error: null,
     });
 
-    const handleCallback = async (code: string) => {
-        const authService = new AuthService();
+    const authService = new AuthService();
+
+    const handleCallback = async (tokens: AuthTokens) => {
         try {
-            const newState = await authService.handleCallback(code);
-            setCurrentUser(newState);
-            window.location.hash = "";
+            setCurrentUser({
+                ...currentUser,
+                isAuthenticated: true,
+                tokens
+            })
+
+            authService.handleCallback(tokens.accessToken);
         } catch (error) {
-            console.error("Error handling callback:", error);
+            console.error("Error handling callback in context:", error);
             setCurrentUser({
                 isAuthenticated: false,
                 user: null,
@@ -47,9 +52,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     const login = async () => {
-        const authService = new AuthService();
         try {
-            debugger;
             const user = await authService.initiateLogin();
             setCurrentUser({
                 ...currentUser,
