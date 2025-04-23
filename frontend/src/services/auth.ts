@@ -5,7 +5,13 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 export class AuthService {
     async initiateLogin(): Promise<void> {
         try {
-            const response = await fetch(`http://localhost:3000/api/auth/spotify`);
+            const response = await fetch(`http://localhost:3000/api/auth/spotify`, {
+                method: 'GET',
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
             const json = await response.json();
             window.location.href = json.url;
             return json;
@@ -17,8 +23,9 @@ export class AuthService {
 
     async handleCallback(code: string): Promise<AuthState> {
         try {
-            const response = await fetch(`${BASE_URL}/api/auth/spotify/callback?code=${code}`);
+            const response = await fetch(`http://localhost:3000/api/auth/spotify/callback?code=${code}`);
             const json = await response.json();
+            console.log("json:", json);
             return {
                 isAuthenticated: true,
                 user: json.user as SpotifyUser,

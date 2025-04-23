@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { AuthService } from '../services/auth';
 import { AuthState, AuthTokens } from '../types/auth';
-import { SpotifyUser } from '../types/spotify';
 interface AuthContextType {
     state: AuthState;
     login: () => Promise<void>;
     logout: () => void;
+    handleCallback: (code: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>({
@@ -17,6 +17,7 @@ const AuthContext = createContext<AuthContextType | undefined>({
     },
     login: async () => {},
     logout: () => {},
+    handleCallback: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -44,20 +45,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             
         }
     }
-    useEffect(() => {
-        const hash = window.location.hash;
-        const codeMatch = hash.match(/code=([^&]+)/);
-
-        if (codeMatch) {
-            handleCallback(codeMatch[1]);
-        }
-    },[])
 
     const login = async () => {
         const authService = new AuthService();
-        console.log("button clicked")
         try {
-            console.log("trying...")
+            debugger;
             const user = await authService.initiateLogin();
             setCurrentUser({
                 ...currentUser,
@@ -82,7 +74,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }   
     
     return (
-        <AuthContext.Provider value={{ state: currentUser, login, logout }}>
+        <AuthContext.Provider value={{ state: currentUser, login, logout, handleCallback }}>
             { children }
         </AuthContext.Provider>
     )   
