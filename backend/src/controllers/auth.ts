@@ -31,8 +31,7 @@ export class AuthController {
             res.status(401).json({ error: "Unauthorized" });
             return;
         }
-        const user = await this.spotifyService.getMyProfile();
-        console.log("user", user);
+        const user = await this.spotifyService.getMyProfile(accessToken);
         res.json({ user });
     }
 }

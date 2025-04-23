@@ -50,7 +50,8 @@ export class SpotifyService {
         }
     }
 
-    async getMyProfile(): Promise<any> {
+    async getMyProfile(accessToken: string): Promise<any> {
+        this.spotifyApi.setAccessToken(accessToken);
         const data = await this.spotifyApi.getMe();
         return data.body;
     }
