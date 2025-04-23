@@ -32,13 +32,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const handleCallback = async (tokens: AuthTokens) => {
         try {
+            const loggedInUser = await authService.handleCallback(tokens.accessToken);
             setCurrentUser({
                 ...currentUser,
                 isAuthenticated: true,
+                user: loggedInUser.user,
                 tokens
             })
-
-            authService.handleCallback(tokens.accessToken);
         } catch (error) {
             console.error("Error handling callback in context:", error);
             setCurrentUser({

@@ -34,7 +34,6 @@ export class AuthService {
             })
         });
         const json = await res.json();
-        console.log("json", json);
         return json;
     }
 

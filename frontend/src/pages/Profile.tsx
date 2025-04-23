@@ -2,5 +2,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 export default function Profile() {
     const { state } = useAuth();
-    return <div>Profile</div>;
+    console.log(state)
+
+    return <div>Profile for {state.user?.display_name}</div>;
 }
