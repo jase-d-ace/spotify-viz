@@ -1,5 +1,5 @@
 import SpotifyWebApi from "spotify-web-api-node";
-import { SpotifyPlaylist, PlaylistAnalysis } from "../types/spotify";
+import { SpotifyPlaylist, PlaylistAnalysis, SpotifyUser } from "../types/spotify";
 
 
 export class SpotifyService {
@@ -32,14 +32,28 @@ export class SpotifyService {
     }
 
     async getTokens(code: string): Promise<{ accessToken: string, refreshToken: string, expires_in: number }> {
-        const data = await this.spotifyApi.authorizationCodeGrant(code);
-        return {
-            accessToken: data.body.access_token,
-            refreshToken: data.body.refresh_token,
-            expires_in: data.body.expires_in
+        try {
+
+            const data = await this.spotifyApi.authorizationCodeGrant(code);
+            return {
+                accessToken: data.body.access_token,
+                refreshToken: data.body.refresh_token,
+                expires_in: data.body.expires_in
+            }
+        } catch (e) {
+            console.error("Error getting tokens:", e);
+            return {
+                accessToken: "",
+                refreshToken: "",
+                expires_in: 0
+            }
         }
     }
 
+    async getMyProfile(): Promise<any> {
+        const data = await this.spotifyApi.getMe();
+        return data.body;
+    }
 
     private generateRandomString(length: number): string {
         const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

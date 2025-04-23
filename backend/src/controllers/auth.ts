@@ -5,22 +5,34 @@ export class AuthController {
     constructor(private spotifyService: SpotifyService) {
     }
 
-    async getAuthUrl(req: Request, res: Response) {
+    async getAuthUrl(_req: Request, res: Response) {
         const url = await this.spotifyService.getAuthUrl(["user-read-private", "user-read-email", "playlist-read-private"]);
         res.json({ url });
     }
 
     async handleCallback(req: Request, res: Response) {
         const { code } = req.query;
+        if (!code || typeof code !== "string") {
+            res.status(400).json({ error: "Invalid code" });
+            return;
+        }
         const { accessToken, refreshToken, expires_in } = await this.spotifyService.getTokens(code as string);
-        this.spotifyService.setAccessToken(accessToken);
-        this.spotifyService.setRefreshToken(refreshToken);
-        console.log("handling callback", accessToken, refreshToken, expires_in);
-        res.redirect(`${process.env.FRONTEND_URL}/callback?accessToken=${accessToken}`);
+        res.redirect(`${process.env.FRONTEND_URL}/callback?accessToken=${accessToken}&refreshToken=${refreshToken}&expires_in=${expires_in}`);
     }
 
-    async refreshAccessToken(req: Request, res: Response) {
+    async refreshAccessToken(_req: Request, res: Response) {
         const accessToken = await this.spotifyService.refreshAccessToken();
         res.json({ accessToken });
+    }
+
+    async logIntoSpotify(req: Request, res: Response) {
+        const accessToken = req.headers.authorization?.split(" ")[1];
+        if (!accessToken) {
+            res.status(401).json({ error: "Unauthorized" });
+            return;
+        }
+        const user = await this.spotifyService.getMyProfile();
+        console.log("user", user);
+        res.json({ user });
     }
 }

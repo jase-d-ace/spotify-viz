@@ -17,6 +17,7 @@ export const securityMiddleware = (req: Request, res: Response, next: NextFuncti
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Access-Control-Allow-Origin', ['http://localhost:5173', "http://127.0.0.1:5173", "http://localhost:3000", "http://127.0.0.1:3000", "https://accounts.spotify.com"]);
 
     next();
 }
