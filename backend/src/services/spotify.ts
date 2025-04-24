@@ -12,7 +12,9 @@ export class SpotifyService {
             redirectUri
         })
     }
-    
+    //////////////////////////////
+    /// spotify auth functions ///
+    //////////////////////////////
     setAccessToken(token:string) {
         this.spotifyApi.setAccessToken(token);
     }
@@ -54,6 +56,10 @@ export class SpotifyService {
         const data = await this.spotifyApi.getMe();
         return data.body;
     }
+
+    ////////////////////////////////
+    // spotify playlist functions //
+    ////////////////////////////////
 
     async getPlaylists(accessToken: string): Promise<any> {
         this.spotifyApi.setAccessToken(accessToken);

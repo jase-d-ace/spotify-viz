@@ -5,7 +5,7 @@ export class PlaylistsController {
     constructor(private spotifyService: SpotifyService) {}
 
     async getPlaylists(req: Request, res: Response) {
-        const accessToken = req.headers.authorization?.split(" ")[1];
+        const accessToken = req.cookies.accesstoken;
         if (!accessToken) {
             res.status(401).json({ error: "Unauthorized" });
             return;
