@@ -1,25 +1,28 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import { createAuthRouter } from "./routes/auth";
 import { SpotifyService } from "./services/spotify";
 import { securityMiddleware } from "./middleware/security";
+import { createPlaylistsRouter } from "./routes/playlists";
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-
+app.use(cookieParser());
 app.use(securityMiddleware);
 
 app.use(cors({
-    origin: ['http://localhost:5173', "http://127.0.0.1:5173", "http://localhost:3000", "http://127.0.0.1:3000", "https://accounts.spotify.com"],
+    origin: "http://127.0.0.1:5173",
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
     preflightContinue: false,
-    optionsSuccessStatus: 204
+    optionsSuccessStatus: 204,
+    exposedHeaders: ['set-cookie']
 }));
 
 app.use(express.json());
@@ -30,6 +33,7 @@ const spotifyService = new SpotifyService(
 )
 
 app.use("/api/auth", createAuthRouter(spotifyService));
+app.use("/api/playlists", createPlaylistsRouter(spotifyService));
 
 app.get("/", (req, res) => {
     res.json({

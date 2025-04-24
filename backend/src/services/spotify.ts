@@ -33,7 +33,6 @@ export class SpotifyService {
 
     async getTokens(code: string): Promise<{ accessToken: string, refreshToken: string, expires_in: number }> {
         try {
-
             const data = await this.spotifyApi.authorizationCodeGrant(code);
             return {
                 accessToken: data.body.access_token,
@@ -53,6 +52,12 @@ export class SpotifyService {
     async getMyProfile(accessToken: string): Promise<any> {
         this.spotifyApi.setAccessToken(accessToken);
         const data = await this.spotifyApi.getMe();
+        return data.body;
+    }
+
+    async getPlaylists(accessToken: string): Promise<any> {
+        this.spotifyApi.setAccessToken(accessToken);
+        const data = await this.spotifyApi.getUserPlaylists();
         return data.body;
     }
 

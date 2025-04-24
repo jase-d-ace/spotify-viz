@@ -17,21 +17,41 @@ export class AuthController {
             return;
         }
         const { accessToken, refreshToken, expires_in } = await this.spotifyService.getTokens(code as string);
-        res.redirect(`${process.env.FRONTEND_URL}/callback?accessToken=${accessToken}&refreshToken=${refreshToken}&expires_in=${expires_in}`);
+        res.cookie("accesstoken", accessToken as string, {
+            httpOnly: true,
+            secure: false,
+            maxAge: expires_in * 1000,
+            sameSite: "lax",
+        });
+        res.cookie("refreshtoken", refreshToken as string, {
+            httpOnly: true,
+            secure: false,
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+            sameSite: "lax",
+        });
+        res.redirect(`${process.env.FRONTEND_URL}/profile`);
     }
 
     async refreshAccessToken(_req: Request, res: Response) {
         const accessToken = await this.spotifyService.refreshAccessToken();
+        res.cookie("accesstoken", accessToken as string, {
+            httpOnly: true,
+            secure: false,
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+            sameSite: "lax",
+        });
         res.json({ accessToken });
     }
 
     async logIntoSpotify(req: Request, res: Response) {
-        const accessToken = req.headers.authorization?.split(" ")[1];
+        const accessToken = req.cookies.accesstoken;
+        console.log("logging in")
         if (!accessToken) {
             res.status(401).json({ error: "Unauthorized" });
             return;
         }
         const user = await this.spotifyService.getMyProfile(accessToken);
+        console.log("user", user)
         res.json({ user });
     }
 }
