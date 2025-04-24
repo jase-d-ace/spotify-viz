@@ -9,6 +9,5 @@ export interface AuthTokens {
 export interface AuthState {
     isAuthenticated: boolean;
     user: SpotifyUser | null;
-    tokens: AuthTokens | null;
     error?: string | null;
 }

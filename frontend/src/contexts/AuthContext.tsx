@@ -5,14 +5,13 @@ interface AuthContextType {
     state: AuthState;
     login: () => Promise<void>;
     logout: () => void;
-    handleCallback: (tokens: AuthTokens) => void;
+    handleCallback: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
     state: {
         isAuthenticated: false,
         user: null,
-        tokens: null,
         error: null,
     },
     login: async () => {},
@@ -24,31 +23,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [currentUser, setCurrentUser] = useState<AuthState>({
         isAuthenticated: false,
         user: null,
-        tokens: null,
         error: null,
     });
 
     const authService = new AuthService();
 
-    const handleCallback = async (tokens: AuthTokens) => {
-        try {
-            const loggedInUser = await authService.handleCallback(tokens.accessToken);
-            setCurrentUser({
-                ...currentUser,
-                isAuthenticated: true,
-                user: loggedInUser.user,
-                tokens
-            })
-        } catch (error) {
-            console.error("Error handling callback in context:", error);
-            setCurrentUser({
-                isAuthenticated: false,
-                user: null,
-                tokens: null,
-                error: "Failed to authenticate",
-            })
-            
-        }
+    const handleCallback = async () => {
+        const loggedInUser = await authService.logIntoSpotify();
+        setCurrentUser({
+            ...currentUser,
+            isAuthenticated: true,
+            user: loggedInUser.user,
+        })
     }
 
     const login = async () => {
@@ -71,7 +57,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setCurrentUser({
             isAuthenticated: false,
             user: null,
-            tokens: null,
             error: null,
         })
     }   

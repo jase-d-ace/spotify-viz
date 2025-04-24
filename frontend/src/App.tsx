@@ -9,7 +9,7 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/callback" element={<Profile />} />
+                    <Route path="/profile" element={<Profile />} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
