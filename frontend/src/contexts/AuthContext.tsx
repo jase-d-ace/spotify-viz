@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 import { AuthService } from '../services/auth';
-import { AuthState, AuthTokens } from '../types/auth';
+import { AuthState } from '../types/auth';
 interface AuthContextType {
     state: AuthState;
     login: () => Promise<void>;
@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const login = async () => {
         try {
-            const user = await authService.initiateLogin();
+            await authService.initiateLogin();
             setCurrentUser({
                 ...currentUser,
                 isAuthenticated: true,

@@ -45,13 +45,11 @@ export class AuthController {
 
     async logIntoSpotify(req: Request, res: Response) {
         const accessToken = req.cookies.accesstoken;
-        console.log("logging in")
         if (!accessToken) {
             res.status(401).json({ error: "Unauthorized" });
             return;
         }
         const user = await this.spotifyService.getMyProfile(accessToken);
-        console.log("user", user)
         res.json({ user });
     }
 }
