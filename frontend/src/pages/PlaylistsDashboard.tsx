@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { usePlaylists } from "../hooks/usePlaylists";
 import { SpotifyPlaylist } from "../types/spotify";
 import Loading from "../components/Loading";
@@ -7,12 +8,17 @@ import PlaylistCard from "../components/PlaylistCard";
 
 
 export default function PlaylistsDashboard() {
-    const { data: playlists, isLoading } = usePlaylists();
+    const [selectedPlaylist, setSelectedPlaylist] = useState<SpotifyPlaylist | null>(null);
+    const { data: playlists, isLoading, isSuccess } = usePlaylists();
     const stripHTML = (html: string) => {
         const div = document.createElement('p');
         div.innerHTML = html;
         return div.textContent || div.innerText || '';
     }
+
+    useEffect(() => {
+        setSelectedPlaylist(playlists?.items[0]);
+    }, [playlists, isSuccess]);
 
     if (isLoading || !playlists) {
         return <Loading />
@@ -24,13 +30,13 @@ export default function PlaylistsDashboard() {
             </div>
             <main>
                 <section className="main-content">
-                    <CurrentPlaylist />
+                    <CurrentPlaylist selectedPlaylist={selectedPlaylist} />
                     <div className="chart-container">
                         <PlaylistVisualizer />
                     </div>
                 </section>
                 <section className="other-playlists">
-                {playlists?.items.map((playlist: SpotifyPlaylist) => <PlaylistCard key={playlist.id} playlist={playlist} stripHTML={stripHTML} />)}
+                {playlists?.items.map((playlist: SpotifyPlaylist) => <PlaylistCard onClick={() => setSelectedPlaylist(playlist)} key={playlist.id} playlist={playlist} stripHTML={stripHTML} />)}
                 </section>
             </main>
         </div>)
