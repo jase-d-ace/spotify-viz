@@ -7,7 +7,6 @@ export class SpotifyService {
                 "Accept": "application/json",
             },
         });
-        const json = await res.json();
-        return json;
+        return await res.json();
     }
 }

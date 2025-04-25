@@ -40,3 +40,21 @@
 .read-the-docs {
   color: #888;
 }
+
+.loading {
+  width: 5em;
+  height: 5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: linear-gradient(0deg, #1a1a1a 50%, #AC008A 100%);
+  animation: spin 1s linear infinite;
+}
+
+.inner-circle {
+  width: 90%;
+  height: 90%;
+  background-color: #1a1a1a;
+  border-radius: 50%;
+}
