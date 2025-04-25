@@ -5,7 +5,7 @@ export default function PlaylistCard( { playlist }: { playlist: SpotifyPlaylist 
         <div className="playlist-card">
             <div key={playlist.id}>
                     <p>{playlist.name}</p>
-                    &nbsp;{playlist.description ? html(playlist.description) : <p>No Description Provided</p>
+                    &nbsp;{playlist.description ? html(playlist.description) : <p>No Description Provided</p>}
             </div>
         </div>
     )
