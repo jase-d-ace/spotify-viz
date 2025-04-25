@@ -30,7 +30,7 @@ export default function PlaylistsDashboard() {
                     </div>
                 </section>
                 <section className="other-playlists">
-                {playlists?.items.map((playlist: SpotifyPlaylist) => <PlaylistCard key={playlist.id} playlist={playlist} html={stripHTML} />)}
+                {playlists?.items.map((playlist: SpotifyPlaylist) => <PlaylistCard key={playlist.id} playlist={playlist} stripHTML={stripHTML} />)}
                 </section>
             </main>
         </div>)
