@@ -1,6 +1,7 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import { PlaylistProvider } from "./contexts/PlaylistContext";
 import Home from "./components/Home";
 import Profile from "./pages/Profile";
 import PlaylistsDashboard from "./pages/PlaylistsDashboard";
@@ -11,13 +12,15 @@ function App() {
     return (
         <QueryClientProvider client={queryClient}>
             <AuthProvider>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/profile" element={<Profile />} />
-                        <Route path="/playlists" element={<PlaylistsDashboard />} />
-                    </Routes>
-                </BrowserRouter>
+                <PlaylistProvider>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/profile" element={<Profile />} />
+                            <Route path="/playlists" element={<PlaylistsDashboard />} />
+                        </Routes>
+                    </BrowserRouter>
+                </PlaylistProvider>
             </AuthProvider>
         </QueryClientProvider>
     )
