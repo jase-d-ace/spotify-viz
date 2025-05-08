@@ -5,40 +5,43 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
+main.playlist-dashboard-main {
+  border: 1px solid pink;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #1a1a1a;
+  color: #fff;
+  padding: 2rem;
+  width: 80em;
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+  section.main-content {
+    border: 1px solid red;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+    div.current-playlist {
+      border: 1px solid blue;
+      width: 20em;
+      height: 40em;
+    }
+
+    div.playlist-visualizer {
+      border: 1px solid yellow;
+      width: 60em;
+      height: 40em;
+      display: flex;
+    }
+    
   }
-  to {
-    transform: rotate(360deg);
+  section.other-playlists {
+    border: 1px solid green;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
   }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
 
 .loading {
