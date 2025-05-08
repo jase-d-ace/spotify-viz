@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const authService = new AuthService();
 
-    const { data: user, isLoading, isError } = useQuery({
+    const { data: _user, isLoading, isError } = useQuery({
         queryKey: ['user'],
         queryFn: async () => {
             const user = await authService.logIntoSpotify();
