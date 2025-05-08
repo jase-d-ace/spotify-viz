@@ -1,11 +1,13 @@
-import { createContext, useContext, useState } from 'react';
-import { AuthService } from '../services/auth';
-import { AuthState } from '../types/auth';
+import { createContext, useContext, useState } from "react";
+import { AuthService } from "../services/auth";
+import { AuthState } from "../types/auth";
+import { useQuery } from "@tanstack/react-query"
 interface AuthContextType {
     state: AuthState;
     login: () => Promise<void>;
     logout: () => void;
-    handleCallback: () => Promise<void>;
+    isLoading: boolean;
+    isError: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -16,7 +18,8 @@ const AuthContext = createContext<AuthContextType>({
     },
     login: async () => {},
     logout: () => {},
-    handleCallback: async () => {},
+    isLoading: false,
+    isError: false,
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -28,14 +31,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const authService = new AuthService();
 
-    const handleCallback = async () => {
-        const loggedInUser = await authService.logIntoSpotify();
-        setCurrentUser({
-            ...currentUser,
-            isAuthenticated: true,
-            user: loggedInUser.user,
-        })
-    }
+    const { data: user, isLoading, isError } = useQuery({
+        queryKey: ['user'],
+        queryFn: async () => {
+            const user = await authService.logIntoSpotify();
+            setCurrentUser({
+                ...currentUser,
+                isAuthenticated: true,
+                user: user.user,
+            })
+            return user;
+        },
+    })
 
     const login = async () => {
         try {
@@ -62,7 +69,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }   
     
     return (
-        <AuthContext.Provider value={{ state: currentUser, login, logout, handleCallback }}>
+        <AuthContext.Provider value={{ state: currentUser, login, logout, isLoading, isError }}>
             { children }
         </AuthContext.Provider>
     )   
