@@ -1,8 +1,5 @@
 import { usePlaylistContext } from "../contexts/PlaylistContext";
 
-// call spotify's api and retrieve a list of tracks
-// render the tracks below
-
 export default function CurrentPlaylist( {selectedPlaylist}: {selectedPlaylist: Record<any, any> | null} ) {
     const { tracks, isTracksLoading, isTracksError } = usePlaylistContext();
     if (isTracksLoading) {
