@@ -30,7 +30,10 @@ export default function PlaylistsDashboard() {
                     </div>
                 </section>
                 <section className="other-playlists">
-                {playlists?.items.map((playlist: SpotifyPlaylist) => <PlaylistCard onClick={() => setSelectedPlaylist(playlist)} key={playlist.id} playlist={playlist} stripHTML={stripHTML} />)}
+                    <h4>Other playlists</h4>
+                    <div className="card-container">
+                        {playlists?.items.map((playlist: SpotifyPlaylist) => <PlaylistCard onClick={() => setSelectedPlaylist(playlist)} key={playlist.id} playlist={playlist} stripHTML={stripHTML} />)}
+                    </div>
                 </section>
             </main>
         </div>)
