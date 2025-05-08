@@ -1,13 +1,21 @@
 import { usePlaylistContext } from "../contexts/PlaylistContext";
+import Loading from "./Loading";
 
 export default function CurrentPlaylist( {selectedPlaylist}: {selectedPlaylist: Record<any, any> | null} ) {
     const { tracks, isTracksLoading, isTracksError } = usePlaylistContext();
-    if (isTracksLoading) {
-        return <div>Loading...</div>;
-    }
-    if (isTracksError) {
-        return <div>Error loading tracks</div>;
-    }
+
+    if (isTracksLoading) return ( 
+        <div className="current-playlist">
+            <h2>Loading...</h2>
+            <Loading />
+        </div>
+    );
+
+    if (isTracksError) return(
+        <div className="current-playlist">
+            <h2>Error</h2>
+        </div>
+    );
 
     return (
         <div className="current-playlist">
