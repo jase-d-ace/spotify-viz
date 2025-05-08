@@ -3,11 +3,14 @@ import { SpotifyPlaylist } from "../types";
 import { useQuery } from "@tanstack/react-query";
 import { SpotifyService } from "../services/spotify";
 interface PlaylistContextType {
-    selectedPlaylist: SpotifyPlaylist | null;
+    selectedPlaylist: Record<any, any> | null;
     setSelectedPlaylist: (playlist: SpotifyPlaylist) => void;
     playlists: Record<any, any> | null;
     isLoading: boolean;
     isError: boolean;
+    tracks: Record<any,any> | null;
+    isTracksLoading: boolean;
+    isTracksError: boolean;
 }
 
 const PlaylistContext = createContext<PlaylistContextType>({
@@ -16,10 +19,13 @@ const PlaylistContext = createContext<PlaylistContextType>({
     playlists: [],
     isLoading: false,
     isError: false,
+    tracks: {},
+    isTracksLoading: false,
+    isTracksError: false,
 });
 
 export const PlaylistProvider = ( { children }: { children: React.ReactNode } ) => {
-    const [selectedPlaylist, setSelectedPlaylist] = useState<SpotifyPlaylist | null>(null);
+    const [selectedPlaylist, setSelectedPlaylist] = useState<Record<any, any> | null>(null);
 
     const spotifyService = new SpotifyService();
     const { data: playlists, isLoading, isError } = useQuery({
@@ -31,10 +37,20 @@ export const PlaylistProvider = ( { children }: { children: React.ReactNode } ) 
         },
     })
 
+    const { data: tracks, isLoading: isTracksLoading, isError: isTracksError } = useQuery({
+        queryKey: ['tracks', selectedPlaylist?.id],
+        queryFn: async () => {
+            if (!selectedPlaylist) return null
+            return await spotifyService.getTracks(selectedPlaylist.id);
+        },
+    })
+
+    console.log(tracks)
+
 
 
     return (
-        <PlaylistContext.Provider value={{ selectedPlaylist, setSelectedPlaylist, playlists, isLoading, isError }}>
+        <PlaylistContext.Provider value={{ selectedPlaylist, setSelectedPlaylist, playlists, isLoading, isError, tracks, isTracksLoading, isTracksError }}>
             { children }
         </PlaylistContext.Provider>
     )
