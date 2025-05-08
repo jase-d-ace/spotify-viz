@@ -1,4 +1,3 @@
-import { SpotifyPlaylist } from "../types/spotify";
 import { usePlaylistContext } from "../contexts/PlaylistContext";
 
 // call spotify's api and retrieve a list of tracks
