@@ -5,7 +5,7 @@ import { SpotifyService } from "../services/spotify";
 interface PlaylistContextType {
     selectedPlaylist: SpotifyPlaylist | null;
     setSelectedPlaylist: (playlist: SpotifyPlaylist) => void;
-    playlists: SpotifyPlaylist[] | null;
+    playlists: Record<any, any> | null;
     isLoading: boolean;
     isError: boolean;
 }
