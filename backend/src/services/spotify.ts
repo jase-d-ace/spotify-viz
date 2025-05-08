@@ -67,6 +67,12 @@ export class SpotifyService {
         return data.body;
     }
 
+    async getTracks(accessToken: string, playlistId: string): Promise<any> {
+        this.spotifyApi.setAccessToken(accessToken);
+        const data = await this.spotifyApi.getPlaylistTracks(playlistId);
+        return data.body;
+    }
+
     private generateRandomString(length: number): string {
         const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let text = '';
