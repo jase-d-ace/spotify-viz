@@ -11,7 +11,7 @@ export default function CurrentPlaylist( {selectedPlaylist}: {selectedPlaylist: 
         </div>
     );
 
-    if (isTracksError) return(
+    if (isTracksError) return (
         <div className="current-playlist">
             <h2>Error</h2>
         </div>
