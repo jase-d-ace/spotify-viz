@@ -4,6 +4,7 @@ import { SpotifyPlaylist, PlaylistAnalysis, SpotifyUser } from "../types/spotify
 
 export class SpotifyService {
     private spotifyApi: SpotifyWebApi;
+    private expiry: number = 0;
 
     constructor(clientId: string, clientSecret: string, redirectUri: string) {
         this.spotifyApi = new SpotifyWebApi({
@@ -15,6 +16,11 @@ export class SpotifyService {
     //////////////////////////////
     /// spotify auth functions ///
     //////////////////////////////
+
+    private async isTokenValid() {
+        return Date.now() >= this.expiry - 60 * 1000
+    }
+
     setAccessToken(token:string) {
         this.spotifyApi.setAccessToken(token);
     }
@@ -25,6 +31,8 @@ export class SpotifyService {
 
     async refreshAccessToken(): Promise<string> {
         const data = await this.spotifyApi.refreshAccessToken();
+        this.expiry = Date.now() + data.body.expires_in * 1000;
+        this.spotifyApi.setAccessToken(data.body.access_token);
         return data.body.access_token;
     }
 
@@ -52,6 +60,11 @@ export class SpotifyService {
     }
 
     async getMyProfile(accessToken: string): Promise<any> {
+        if (!this.isTokenValid()) {
+            const newToken = await this.spotifyApi.refreshAccessToken();
+            this.expiry = Date.now() + 3600 * 1000;
+            accessToken = newToken.body.access_token;
+        }
         this.spotifyApi.setAccessToken(accessToken);
         const data = await this.spotifyApi.getMe();
         return data.body;
@@ -62,12 +75,22 @@ export class SpotifyService {
     ////////////////////////////////
 
     async getPlaylists(accessToken: string): Promise<any> {
+        if (!this.isTokenValid()) {
+            const newToken = await this.spotifyApi.refreshAccessToken();
+            this.expiry = Date.now() + 3600 * 1000;
+            accessToken = newToken.body.access_token;
+        }
         this.spotifyApi.setAccessToken(accessToken);
         const data = await this.spotifyApi.getUserPlaylists();
         return data.body;
     }
 
     async getTracks(accessToken: string, playlistId: string): Promise<any> {
+        if (!this.isTokenValid()) {
+            const newToken = await this.spotifyApi.refreshAccessToken();
+            this.expiry = Date.now() + 3600 * 1000;
+            accessToken = newToken.body.access_token;
+        }
         this.spotifyApi.setAccessToken(accessToken);
         const data = await this.spotifyApi.getPlaylistTracks(playlistId);
         return data.body;
