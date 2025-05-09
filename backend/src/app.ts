@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import { createAuthRouter } from "./routes/auth";
 import { SpotifyService } from "./services/spotify";
+import { OpenAIService } from "./services/openai";
 import { securityMiddleware } from "./middleware/security";
 import { createPlaylistsRouter } from "./routes/playlists";
 
@@ -26,11 +27,13 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
 const spotifyService = new SpotifyService(
     process.env.SPOTIFY_CLIENT_ID as string,
     process.env.SPOTIFY_CLIENT_SECRET as string,
     process.env.SPOTIFY_REDIRECT_URI as string
 )
+const openAIService = new OpenAIService(process.env.OPENAI_APIKEY as string)
 
 app.use("/api/auth", createAuthRouter(spotifyService));
 app.use("/api/playlists", createPlaylistsRouter(spotifyService));
