@@ -45,10 +45,6 @@ export const PlaylistProvider = ( { children }: { children: React.ReactNode } ) 
         },
     })
 
-    console.log(tracks)
-
-
-
     return (
         <PlaylistContext.Provider value={{ selectedPlaylist, setSelectedPlaylist, playlists, isLoading, isError, tracks, isTracksLoading, isTracksError }}>
             { children }

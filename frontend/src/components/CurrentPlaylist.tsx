@@ -6,7 +6,7 @@ export default function CurrentPlaylist( {selectedPlaylist}: {selectedPlaylist: 
 
     if (isTracksLoading) return ( 
         <div className="current-playlist">
-            <h2>Loading...</h2>
+            <h2>Current Playlist</h2>
             <Loading />
         </div>
     );
