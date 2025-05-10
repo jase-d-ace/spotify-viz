@@ -1,7 +1,12 @@
-export default function VisualizerNav() {
+export default function VisualizerNav({ setActiveTab }: { setActiveTab: (tab: string) => void }) {
     return (
         <div className="visualizer-nav">
-            <h2>Visualizer Nav</h2>
+            <nav>
+                <ul>
+                    <li onClick={() => setActiveTab("visualizer")}>Visualizer</li>
+                    <li onClick={() => setActiveTab("analysis")}>Analysis</li>
+                </ul>
+            </nav>
         </div>
     )
 }
