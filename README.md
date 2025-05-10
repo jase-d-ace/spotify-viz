@@ -32,7 +32,8 @@ At full power, this app will let you visualize your Spotify playlists in the sam
 * `backend/.env`
   * `SPOTIFY_CLIENT_ID` From the Spotify Developer dashboard.
   * `SPOTIFY_CLIENT_SECRET` From the Spotify Developer dashboard.
-  * `SPOTIFY_REDIRECT_URI` This has to match exactly what's in the Spotify Developer dashboard. So if you wrote `127.0.0.1:5173/callback` in the dashboard, you have to write `127.0.0.1:5173/callback` here.
+  * `SPOTIFY_REDIRECT_URI` This has to match exactly what's in the Spotify Developer dashboard. So if you wrote `http://127.0.0.1:3000/api/auth/spotify/callback` in the dashboard, you have to write `http://127.0.0.1:3000/api/auth/spotify/callback` here.
+  * `FRONTEND_URL` This is the URL of your frontend. It's used to redirect the user back to the frontend after they've logged in. Example: `http://127.0.0.1:5173`
   * `OPENAI_API_KEY` From the OpenAI dashboard.
 
 
