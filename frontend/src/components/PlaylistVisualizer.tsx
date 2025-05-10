@@ -20,30 +20,30 @@ export default function PlaylistVisualizer() {
     const handleClick = async () => {
         setLoading(true);
         const res = await analysisService.getTracksAnalysis(tracksList);
-        console.log(JSON.parse(res.analysis))
         setAnalysis(JSON.parse(res.analysis));
         setLoading(false);
     }
 
     return (
         <div className="playlist-visualizer">
-            <h2>Playlist Visualizer</h2>
-            <VisualizerNav 
-                setActiveTab={setActiveTab}
-            />
-            <div className="visualizer-container">
-                <div className="visualizer-content">
-                    <h3>Visualizer Content</h3>
-                    <button 
-                        onClick={() => handleClick()}
-                        disabled={loading || !!analysis}
-                        >Analyze Tracks
-                    </button>
+            <main className="visualizer-container">
+                <h2>Playlist Visualizer</h2>
+                <header className="visualizer-header">
+                    <VisualizerNav 
+                        setActiveTab={setActiveTab}
+                    />
+                </header>
+                <section className="visualizer-content">
                     {loading && <Loading />}
                     {analysis && activeTab == "visualizer" && <Gradient colors={analysis.colors} description={analysis.description} />}
                     {analysis && activeTab == "analysis" && <RankCheck rankings={analysis.ranking} />}
-                </div>
-            </div>
+                    <button 
+                        onClick={() => handleClick()}
+                        disabled={loading}
+                        >Analyze Tracks
+                    </button>
+                </section>
+            </main>
         </div>
     )
 }
