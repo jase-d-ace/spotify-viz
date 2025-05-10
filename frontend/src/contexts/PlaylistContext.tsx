@@ -26,6 +26,7 @@ const PlaylistContext = createContext<PlaylistContextType>({
 
 export const PlaylistProvider = ( { children }: { children: React.ReactNode } ) => {
     const [selectedPlaylist, setSelectedPlaylist] = useState<Record<any, any> | null>(null);
+    const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
 
     const spotifyService = new SpotifyService();
     const { data: playlists, isLoading, isError } = useQuery({
@@ -33,8 +34,10 @@ export const PlaylistProvider = ( { children }: { children: React.ReactNode } ) 
         queryFn: async () => {
             const playlists = await spotifyService.getPlaylists()
             setSelectedPlaylist(playlists.items[0] || null)
+            setIsInitialLoad(false);
             return playlists
         },
+        enabled: isInitialLoad // coerce the presnce of selectedPlaylist into a boolean
     })
 
     const { data: tracks, isLoading: isTracksLoading, isError: isTracksError } = useQuery({
@@ -43,6 +46,7 @@ export const PlaylistProvider = ( { children }: { children: React.ReactNode } ) 
             if (!selectedPlaylist) return null
             return await spotifyService.getTracks(selectedPlaylist.id);
         },
+        enabled: Boolean(selectedPlaylist)
     })
 
     return (

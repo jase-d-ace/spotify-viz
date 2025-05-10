@@ -3,6 +3,8 @@ import { usePlaylistContext } from "../contexts/PlaylistContext";
 import { AnalysisService } from "../services/analysis";
 import VisualizerNav from "./VisualizerNav";
 import Loading from "./Loading";
+import RankCheck from "./RankCheck";
+import Gradient from "./Gradient";
 
 export default function PlaylistVisualizer() {
 
@@ -18,7 +20,8 @@ export default function PlaylistVisualizer() {
     const handleClick = async () => {
         setLoading(true);
         const res = await analysisService.getTracksAnalysis(tracksList);
-        setAnalysis(res);
+        console.log(JSON.parse(res.analysis))
+        setAnalysis(JSON.parse(res.analysis));
         setLoading(false);
     }
 
@@ -33,10 +36,12 @@ export default function PlaylistVisualizer() {
                     <h3>Visualizer Content</h3>
                     <button 
                         onClick={() => handleClick()}
-                        disabled={loading}
+                        disabled={loading || !!analysis}
                         >Analyze Tracks
                     </button>
                     {loading && <Loading />}
+                    {analysis && activeTab == "visualizer" && <Gradient colors={analysis.colors} description={analysis.description} />}
+                    {analysis && activeTab == "analysis" && <RankCheck rankings={analysis.ranking} />}
                 </div>
             </div>
         </div>
