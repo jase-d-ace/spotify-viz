@@ -35,8 +35,8 @@ export default function PlaylistVisualizer() {
                 </header>
                 <section className="visualizer-content">
                     {loading && <Loading />}
-                    {activeTab == "visualizer" && <Gradient colors={analysis.colors} description={analysis.description} />}
-                    {analysis && activeTab == "analysis" && <RankCheck rankings={analysis.ranking} />}
+                    {activeTab == "visualizer" && <Gradient colors={analysis?.colors || []} description={analysis?.description} />}
+                    {analysis && activeTab == "analysis" && <RankCheck rankings={analysis?.ranking} />}
                     <button 
                         onClick={() => handleClick()}
                         disabled={loading}
