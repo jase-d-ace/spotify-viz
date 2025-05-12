@@ -1,4 +1,4 @@
-// In reference to ./services/openai.ts schema
+// In reference to ./backend/src/services/openai.ts schema
 
 export interface Ranking {
   description: string;
