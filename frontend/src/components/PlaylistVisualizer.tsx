@@ -5,6 +5,7 @@ import VisualizerNav from "./VisualizerNav";
 import Loading from "./Loading";
 import RankCheck from "./RankCheck";
 import Gradient from "./Gradient";
+import ThreeDimViz from "./ThreeDimViz";
 
 export default function PlaylistVisualizer() {
 
@@ -24,6 +25,7 @@ export default function PlaylistVisualizer() {
         setLoading(false);
     }
 
+
     return (
         <div className="playlist-visualizer">
             <main className="visualizer-container">
@@ -35,7 +37,8 @@ export default function PlaylistVisualizer() {
                 </header>
                 <section className="visualizer-content">
                     {loading && <Loading />}
-                    {activeTab == "visualizer" && <Gradient colors={analysis?.colors || []} description={analysis?.description} />}
+                    {/* {activeTab == "visualizer" && <Gradient colors={analysis?.colors || []} description={analysis?.description} />} */}
+                    { analysis && activeTab == "visualizer" && <ThreeDimViz colors={analysis?.colors || []} /> }
                     {analysis && activeTab == "analysis" && <RankCheck rankings={analysis.ranking} />}
                     <button 
                         onClick={() => handleClick()}
