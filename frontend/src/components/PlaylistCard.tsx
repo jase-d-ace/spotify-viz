@@ -1,6 +1,6 @@
-import { SpotifyPlaylist } from "../types/spotify";
+import type { Playlist } from "@spotify/web-api-ts-sdk";
 
-export default function PlaylistCard( { playlist, stripHTML, onClick }: { playlist: SpotifyPlaylist, stripHTML: (html: string) => string, onClick: () => void }) {
+export default function PlaylistCard( { playlist, stripHTML, onClick }: { playlist: Playlist, stripHTML: (html: string) => string, onClick: () => void }) {
     return (
         <div className="playlist-card">
             <div onClick={onClick} key={playlist.id}>

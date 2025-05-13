@@ -1,5 +1,3 @@
-
-import { SpotifyPlaylist } from "../types/spotify";
 import { usePlaylistContext } from "../contexts/PlaylistContext";
 import Loading from "../components/Loading";
 import CurrentPlaylist from "../components/CurrentPlaylist";
@@ -32,7 +30,7 @@ export default function PlaylistsDashboard() {
                 <section className="other-playlists">
                     <h4>Other playlists</h4>
                     <div className="card-container">
-                        {playlists?.items.map((playlist: SpotifyPlaylist) => <PlaylistCard onClick={() => setSelectedPlaylist(playlist)} key={playlist.id} playlist={playlist} stripHTML={stripHTML} />)}
+                        {playlists?.items.map((playlist) => <PlaylistCard onClick={() => setSelectedPlaylist(playlist)} key={playlist.id} playlist={playlist} stripHTML={stripHTML} />)}
                     </div>
                 </section>
             </main>

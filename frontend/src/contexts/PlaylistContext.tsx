@@ -1,31 +1,37 @@
 import { createContext, useContext, useState } from "react";
-import { SpotifyPlaylist } from "../types";
 import { useQuery } from "@tanstack/react-query";
 import { SpotifyService } from "../services/spotify";
+import type {
+  PlaylistedTrack,
+  Track,
+  Playlist,
+  Page,
+} from "@spotify/web-api-ts-sdk";
+
 interface PlaylistContextType {
-    selectedPlaylist: Record<any, any> | null;
-    setSelectedPlaylist: (playlist: SpotifyPlaylist) => void;
-    playlists: Record<any, any> | null;
-    isLoading: boolean;
-    isError: boolean;
-    tracks: Record<any,any> | null;
-    isTracksLoading: boolean;
-    isTracksError: boolean;
+  selectedPlaylist: Playlist | null;
+  setSelectedPlaylist: (playlist: Playlist | null) => void;
+  playlists: Page<Playlist> | null;
+  isLoading: boolean;
+  isError: boolean;
+  tracks: Page<PlaylistedTrack<Track>> | null;
+  isTracksLoading: boolean;
+  isTracksError: boolean;
 }
 
 const PlaylistContext = createContext<PlaylistContextType>({
-    selectedPlaylist: null,
-    setSelectedPlaylist:() => {},
-    playlists: [],
-    isLoading: false,
-    isError: false,
-    tracks: {},
-    isTracksLoading: false,
-    isTracksError: false,
+  selectedPlaylist: null,
+  setSelectedPlaylist: () => {},
+  playlists: null,
+  isLoading: false,
+  isError: false,
+  tracks: null,
+  isTracksLoading: false,
+  isTracksError: false,
 });
 
 export const PlaylistProvider = ( { children }: { children: React.ReactNode } ) => {
-    const [selectedPlaylist, setSelectedPlaylist] = useState<Record<any, any> | null>(null);
+    const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(null);
     const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
 
     const spotifyService = new SpotifyService();

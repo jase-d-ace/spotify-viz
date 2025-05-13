@@ -1,6 +1,4 @@
 import SpotifyWebApi from "spotify-web-api-node";
-import { SpotifyPlaylist, PlaylistAnalysis, SpotifyUser } from "../types/spotify";
-
 
 export class SpotifyService {
     private spotifyApi: SpotifyWebApi;
@@ -59,7 +57,7 @@ export class SpotifyService {
         }
     }
 
-    async getMyProfile(accessToken: string): Promise<any> {
+    async getMyProfile(accessToken: string): Promise<SpotifyApi.CurrentUsersProfileResponse> {
         if (!this.isTokenValid()) {
             const newToken = await this.spotifyApi.refreshAccessToken();
             this.expiry = Date.now() + 3600 * 1000;
@@ -74,7 +72,7 @@ export class SpotifyService {
     // spotify playlist functions //
     ////////////////////////////////
 
-    async getPlaylists(accessToken: string): Promise<any> {
+    async getPlaylists(accessToken: string): Promise<SpotifyApi.ListOfUsersPlaylistsResponse> {
         if (!this.isTokenValid()) {
             const newToken = await this.spotifyApi.refreshAccessToken();
             this.expiry = Date.now() + 3600 * 1000;
@@ -85,7 +83,7 @@ export class SpotifyService {
         return data.body;
     }
 
-    async getTracks(accessToken: string, playlistId: string): Promise<any> {
+    async getTracks(accessToken: string, playlistId: string): Promise<SpotifyApi.PlaylistTrackResponse> {
         if (!this.isTokenValid()) {
             const newToken = await this.spotifyApi.refreshAccessToken();
             this.expiry = Date.now() + 3600 * 1000;
