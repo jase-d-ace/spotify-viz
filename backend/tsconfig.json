@@ -4,8 +4,11 @@
       "target": "ES6",
       "module": "CommonJS",
       "outDir": "./dist",
-      "rootDir": "./src",
       "strict": true,
       "skipLibCheck": true,
+      "paths": {
+        "@types": ["../types/index.ts"],
+      }
     },
+    "include": ["src"]
   }

@@ -1,7 +1,7 @@
 import { useAuth } from "../contexts/AuthContext";
 
 export default function Login() {
-    const { state, login } = useAuth();
+    const { login } = useAuth();
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">
