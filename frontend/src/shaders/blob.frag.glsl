@@ -86,16 +86,27 @@ float snoise(vec3 v) {
 // —————————————————————————————————
 
 uniform float u_time;
-uniform vec3  u_colors[4];
+uniform vec3  u_colors[12];
+uniform int   u_colorCount;
 
 void main() {
   vec2 pos = vUv * 2.0 - 1.0;
-  float r = length(pos);
-  float n = snoise(vec3(pos * 2.0, u_time * 0.2));
-  float mask = smoothstep(0.5 + n * .2, 0.49 + n * .2, r);
+  float r  = length(pos);
+  float n  = snoise(vec3(pos * 2.0, u_time * 0.2));
+  float mask = smoothstep(0.49 + n*0.2,   0.5 + n*0.2,   r);
 
-  vec3 col = mix(u_colors[0], u_colors[1], mask);
-  col = mix(col, u_colors[int(mod(u_time, 4.0))], .3);
+  // New palette indexing logic:
+  float scaled = mask * float(u_colorCount - 1);
+  int   idx    = int(floor(scaled));
+  float frac   = fract(scaled);
+
+  // Clamp idx in integer domain
+  idx = clamp(idx, 0, int(u_colorCount) - 2);
+
+  // Blend between adjacent colors
+  vec3 c0  = u_colors[idx];
+  vec3 c1  = u_colors[idx + 1];
+  vec3 col = mix(c0, c1, frac);
 
   gl_FragColor = vec4(col, 1.0);
 }

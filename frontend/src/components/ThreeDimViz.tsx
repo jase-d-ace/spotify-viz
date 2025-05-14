@@ -8,11 +8,20 @@ import fragShader from "../shaders/blob.frag.glsl";
 const BlobMaterial = shaderMaterial(
   {
     u_time: 0,
+    u_colorCount: 12,
     u_colors: [
-        new THREE.Color('#000000'),
-        new THREE.Color('#000000'),
-        new THREE.Color('#000000'),
-        new THREE.Color('#000000'),
+        new THREE.Color('#FFFFFF'),
+        new THREE.Color('#111111'),
+        new THREE.Color('#222222'),
+        new THREE.Color('#333333'),
+        new THREE.Color('#444444'),
+        new THREE.Color('#555555'),
+        new THREE.Color('#666666'),
+        new THREE.Color('#777777'),
+        new THREE.Color('#888888'),
+        new THREE.Color('#999999'),
+        new THREE.Color('#101010'),
+        new THREE.Color('#BBBBBB'),
       ] 
   },
   vertShader,
@@ -26,7 +35,8 @@ function BlobPlane( { colors }: { colors: string[] } ) {
     const matRef = useRef<any>(null); 
     useFrame(({ clock }) => {
         if (matRef.current) {
-            matRef.current.u_time = clock.getElapsedTime()
+            matRef.current.u_time = clock.getElapsedTime();
+            matRef.current.u_colorCount = colorVecs.length;
             matRef.current.u_colors = colorVecs;
         };
     });
@@ -35,7 +45,7 @@ function BlobPlane( { colors }: { colors: string[] } ) {
         <mesh>
             <planeGeometry args={[2, 2]} />
             {/* @ts-ignore */}
-            <blobMaterial ref={matRef} u_colors={colorVecs} side={THREE.DoubleSide} />
+            <blobMaterial ref={matRef} u_colorCount={colorVecs.length} u_colors={colorVecs} side={THREE.DoubleSide} />
         </mesh>
     )
 }
