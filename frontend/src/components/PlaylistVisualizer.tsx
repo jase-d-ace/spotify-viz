@@ -16,9 +16,10 @@ export default function PlaylistVisualizer() {
     const { tracks } = usePlaylistContext();
     const analysisService = new AnalysisService();
 
-    const tracksList = tracks?.items.map((track: any) => (`title: ${track.track.name} artist: ${track.track.artists[0].name}`));
+    const tracksList = tracks?.items.map((track) => (`title: ${track.track.name} artist: ${track.track.artists[0].name}`));
 
     const handleClick = async () => {
+        if (!tracksList) return;
         setLoading(true);
         const res = await analysisService.getTracksAnalysis(tracksList);
         setAnalysis(res.analysis);

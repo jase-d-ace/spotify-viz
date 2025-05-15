@@ -1,4 +1,4 @@
-import { SpotifyUser } from "./spotify";
+import type { UserProfile } from "@spotify/web-api-ts-sdk";
 
 export interface AuthTokens {
     accessToken: string;
@@ -8,6 +8,6 @@ export interface AuthTokens {
 
 export interface AuthState {
     isAuthenticated: boolean;
-    user: SpotifyUser | null;
+    user: UserProfile | null;
     error?: string | null;
 }
