@@ -85,28 +85,36 @@ float snoise(vec3 v) {
 }
 // —————————————————————————————————
 
+
 uniform float u_time;
 uniform vec3  u_colors[12];
 uniform int   u_colorCount;
 
 void main() {
+  // 1) normalized screen→[-1,1]
   vec2 pos = vUv * 2.0 - 1.0;
-  float r  = length(pos);
-  float n  = snoise(vec3(pos * 2.0, u_time * 0.2));
-  float mask = smoothstep(0.49 + n*0.2,   0.5 + n*0.2,   r);
+  float r   = length(pos);             // 0 at center → √2 at corners (we’ll clamp below)
 
-  // New palette indexing logic:
-  float scaled = mask * float(u_colorCount - 1);
+  // 2) sample noise in 3D (x,y,time) for organic distortion
+  float n         = snoise(vec3(pos * 2.0, u_time * 0.25));
+  float amplitude = 0.25;              // tweak for “wobbliness”
+
+  // 3) distort the radius, then clamp to [0,1]
+  float distorted = clamp(r + n * amplitude, 0.0, 1.0);
+
+  // 4) scale that into your palette [0..u_colorCount-1]
+  float scaled = distorted * float(u_colorCount - 1);
   int   idx    = int(floor(scaled));
   float frac   = fract(scaled);
 
-  // Clamp idx in integer domain
-  idx = clamp(idx, 0, int(u_colorCount) - 2);
+  // 5) clamp the integer index so you never read past the end
+  idx = clamp(idx, 0, u_colorCount - 2);
 
-  // Blend between adjacent colors
+  // 6) linearly blend between the two adjacent colors
   vec3 c0  = u_colors[idx];
   vec3 c1  = u_colors[idx + 1];
   vec3 col = mix(c0, c1, frac);
 
+  // 7) output
   gl_FragColor = vec4(col, 1.0);
 }
