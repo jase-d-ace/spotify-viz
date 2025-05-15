@@ -1,5 +1,4 @@
 precision highp float;
-varying vec2 vUv;
 
 // 3D Simplex Noise (Ashima)
 // —————————————————————————————————
@@ -85,7 +84,7 @@ float snoise(vec3 v) {
 }
 // —————————————————————————————————
 
-
+varying vec2 vUv;
 uniform float u_time;
 uniform vec3  u_colors[12];
 uniform int   u_colorCount;
