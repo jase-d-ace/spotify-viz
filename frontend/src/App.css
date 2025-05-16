@@ -37,6 +37,12 @@ main.playlist-dashboard-main {
       width: 60em;
       height: 40em;
       display: flex;
+
+      section.visualizer-content {
+        border: 1px solid white;
+        height: 50em;
+        width: 60em;
+      }
     }
     
   }
