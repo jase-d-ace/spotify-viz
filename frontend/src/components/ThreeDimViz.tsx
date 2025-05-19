@@ -54,16 +54,8 @@ export default function ThreeDimViz( { colors }: { colors: string[] } ) {
 
     return (
         <Canvas
+            className="three-d-viz-canvas"
             gl={{ antialias: true }}
-            style={{
-                position: "relative",
-                border: "1px solid magenta",
-                margin: "0 auto",
-                top: 0,
-                left: 0,
-                height: "20em",
-                width: "60em"
-            }}
             camera={{ position: [0, 0, 1] }}
         >
             <BlobPlane colors={colors} />

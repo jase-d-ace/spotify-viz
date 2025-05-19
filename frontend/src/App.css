@@ -40,8 +40,14 @@ main.playlist-dashboard-main {
 
       section.visualizer-content {
         border: 1px solid white;
-        height: 50em;
+        height: 30em;
         width: 60em;
+
+        div.three-d-viz-canvas {
+          border: 1px solid cyan;
+          height: 50em;
+          width: 60em;
+        }
       }
     }
     
