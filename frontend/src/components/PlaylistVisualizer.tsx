@@ -27,7 +27,7 @@ export default function PlaylistVisualizer() {
     }
 
     return (
-        <div className="playlist-visualizer">
+        <div className="playlist-visualizer box">
             <main className="visualizer-container">
                 <h2>Playlist Visualizer</h2>
                 <header className="visualizer-header">

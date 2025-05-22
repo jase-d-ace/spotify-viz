@@ -5,35 +5,38 @@
   text-align: center;
 }
 
+.box {
+  border-radius: 5px;
+  border: 1px solid #EFF0F4;
+}
+
 main.playlist-dashboard-main {
-  border: 1px solid pink;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background-color: #1a1a1a;
+  justify-content: space-between;
+  background-color: #323441;
   color: #fff;
   padding: 2rem;
   width: 80em;
 
   section.main-content {
-    border: 1px solid red;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-bottom: 1em;
     
     div.current-playlist {
-      border: 1px solid blue;
       width: 20em;
       height: 40em;
       overflow-y: scroll;
       display: flex;
       flex-direction: column;
       align-items: center;
+      margin-right: 1em;
     }
 
     div.playlist-visualizer {
-      border: 1px solid yellow;
       width: 60em;
       height: 40em;
       display: flex;
@@ -41,11 +44,10 @@ main.playlist-dashboard-main {
     
   }
   section.other-playlists {
-    border: 1px solid green;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 100%;
+    width: 81em;
     overflow-x: scroll;
 
     div.card-container {
