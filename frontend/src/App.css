@@ -47,6 +47,12 @@ main.playlist-dashboard-main {
           border: 1px solid cyan;
           height: 50em;
           width: 60em;
+
+          div > canvas.three-dim-viz-canvas {
+            height: 50em;
+            width: 92em;
+            margin-left: -16em;
+          }
         }
       }
     }

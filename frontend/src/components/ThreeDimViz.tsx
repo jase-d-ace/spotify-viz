@@ -55,6 +55,12 @@ export default function ThreeDimViz( { colors }: { colors: string[] } ) {
     return (
         <Canvas
             className="three-d-viz-canvas"
+            onCreated={({ gl }) => {
+                // 1) grab the real <canvas> that three.js created
+                const canvas = gl.domElement as HTMLCanvasElement;
+                canvas.classList.add("three-dim-viz-canvas")
+                canvas.removeAttribute("style");
+              }}
             gl={{ antialias: true }}
             camera={{ position: [0, 0, 1] }}
         >
