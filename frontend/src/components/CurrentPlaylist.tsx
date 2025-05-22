@@ -5,20 +5,20 @@ export default function CurrentPlaylist( {selectedPlaylist}: {selectedPlaylist: 
     const { tracks, isTracksLoading, isTracksError } = usePlaylistContext();
 
     if (isTracksLoading) return ( 
-        <div className="current-playlist">
+        <div className="current-playlist box">
             <h2>Current Playlist</h2>
             <Loading />
         </div>
     );
 
     if (isTracksError) return (
-        <div className="current-playlist">
+        <div className="current-playlist box">
             <h2>Error</h2>
         </div>
     );
 
     return (
-        <div className="current-playlist">
+        <div className="current-playlist box">
             <h2>Current Playlist</h2>
             {selectedPlaylist && <p>{selectedPlaylist.name}</p>}
             {
