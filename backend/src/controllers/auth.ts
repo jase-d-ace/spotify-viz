@@ -16,20 +16,27 @@ export class AuthController {
             res.status(400).json({ error: "Invalid code" });
             return;
         }
-        const { accessToken, refreshToken, expires_in } = await this.spotifyService.getTokens(code as string);
-        res.cookie("accesstoken", accessToken as string, {
-            httpOnly: true,
-            secure: false,
-            maxAge: expires_in * 1000,
-            sameSite: "lax",
-        });
-        res.cookie("refreshtoken", refreshToken as string, {
-            httpOnly: true,
-            secure: false,
-            maxAge: 30 * 24 * 60 * 60 * 1000,
-            sameSite: "lax",
-        });
-        res.redirect(`${process.env.FRONTEND_URL}/profile`);
+        try {
+            const { accessToken, refreshToken, expires_in } = await this.spotifyService.getTokens(code as string);
+            res.cookie("accesstoken", accessToken as string, {
+                httpOnly: true,
+                secure: false,
+                maxAge: expires_in * 1000,
+                sameSite: "lax",
+            });
+            res.cookie("refreshtoken", refreshToken as string, {
+                httpOnly: true,
+                secure: false,
+                maxAge: 30 * 24 * 60 * 60 * 1000,
+                sameSite: "lax",
+            });
+            res.redirect(`${process.env.FRONTEND_URL}/profile`);
+        } catch (e) {
+            res.json({
+                status: 400,
+                error: e
+            })
+        }
     }
 
     async refreshAccessToken(_req: Request, res: Response) {
