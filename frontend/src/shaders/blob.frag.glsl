@@ -84,36 +84,43 @@ float snoise(vec3 v) {
 }
 // —————————————————————————————————
 
-varying vec2 vUv;
 uniform float u_time;
 uniform vec3  u_colors[12];
 uniform int   u_colorCount;
+varying vec2  vUv;
+
+#define PI 3.141592653589793
 
 void main() {
-  // 1) normalized screen→[-1,1]
-  vec2 pos = vUv * 2.0 - 1.0;
-  float r   = length(pos);             // 0 at center → √2 at corners (we’ll clamp below)
+  // 1) Polar coords + noise distortion
+  vec2 pos       = vUv * 2.0 - 1.0;
+  float r        = length(pos);
+  float n        = snoise(vec3(pos * 2.0, u_time * 0.25));
+  float distorted = clamp(r + n * 0.25, 0.0, 1.0);
 
-  // 2) sample noise in 3D (x,y,time) for organic distortion
-  float n         = snoise(vec3(pos * 2.0, u_time * 0.25));
-  float amplitude = 0.25;              // tweak for “wobbliness”
+  // 2) Compute a smooth, looping phase in [0,1]
+  //    sin cycles -1→1 continuously, so we map into 0→1
+  float speed = 0.05; // lower = slower color drift
+  float phase = 0.5 + 0.5 * sin(u_time * 2.0 * PI * speed);
 
-  // 3) distort the radius, then clamp to [0,1]
-  float distorted = clamp(r + n * amplitude, 0.0, 1.0);
+  // 3) Combine distortion + phase into a circular lookup
+  //    - first normalize distorted → [0,1]
+  //    - add the continuous phase
+  //    - wrap back into [0,1] via fract
+  float t       = fract(distorted + phase);
 
-  // 4) scale that into your palette [0..u_colorCount-1]
-  float scaled = distorted * float(u_colorCount - 1);
-  int   idx    = int(floor(scaled));
-  float frac   = fract(scaled);
+  // 4) Scale into [0 .. u_colorCount)
+  float idxF    = t * float(u_colorCount);
+  int   idx0    = int(floor(idxF));
+  float frac    = fract(idxF);
 
-  // 5) clamp the integer index so you never read past the end
-  idx = clamp(idx, 0, u_colorCount - 2);
+  // 5) Wrap the second index around the ring
+  int idx1      = (idx0 + 1) % u_colorCount;
 
-  // 6) linearly blend between the two adjacent colors
-  vec3 c0  = u_colors[idx];
-  vec3 c1  = u_colors[idx + 1];
+  // 6) Blend between the two palette entries
+  vec3 c0  = u_colors[idx0];
+  vec3 c1  = u_colors[idx1];
   vec3 col = mix(c0, c1, frac);
 
-  // 7) output
   gl_FragColor = vec4(col, 1.0);
 }
