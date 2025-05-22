@@ -1,6 +1,6 @@
 #root {
   max-width: 1280px;
-  margin: 0 auto;
+  margin: 0 0;
   padding: 2rem;
   text-align: center;
 }
@@ -16,9 +16,10 @@ main.playlist-dashboard-main {
   align-items: center;
   justify-content: space-between;
   background-color: #323441;
+  margin-left: 20em;
   color: #fff;
   padding: 2rem;
-  width: 80em;
+  width: 110em;
 
   section.main-content {
     display: flex;
@@ -51,17 +52,18 @@ main.playlist-dashboard-main {
     overflow-x: scroll;
 
     div.card-container {
-      border: 1px solid orange;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+      align-items: center;
       overflow-x: scroll;
+      height: 15em;
 
       div.playlist-card {
-        border: 1px solid purple;
-        height: 10em;
-        width: 10em;
+        height: 12em;
+        width: 18em;
         cursor: pointer;
+        margin-left: 1em;
         display: flex;
         flex-direction: column;
         align-items: center;
