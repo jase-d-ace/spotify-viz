@@ -1,5 +1,7 @@
 import OpenAI from "openai";
 import type { Analysis } from "@types";
+import { zodResponseFormat } from "openai/helpers/zod";
+import { z } from "zod";
 
 export class OpenAIService {
     private openai: OpenAI;
@@ -19,66 +21,44 @@ export class OpenAIService {
             Any commentary or analysis for the gradient should go in the "description" field, and any commentary or analysis of the ranking should go in the "ranking.description" field. Letter Rankings should go in the "ranking.letter_ranking" field and number rankings should go in the "ranking.number_ranking" field.
             Do not respond using markdown in any of the fields.
         `
-        const schema = {
-            type: "object",
-            properties: {
-                colors: {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    }
-                },
-                description: {
-                    type: "string"
-                },
-                ranking: {
-                    type: "object",
-                    properties: {
-                        "letter_ranking": { 
-                            type: "string"
-                        },
-                        "number_ranking": {
-                            type: "number"
-                        },
-                        "description": {
-                            type: "string"
-                        }
-                    },
-                    required: ["letter_ranking", "number_ranking", "description"],
-                    additionalProperties: false,
-                }
-            },
-            required: ["colors", "description", "ranking"],
-            additionalProperties: false,
-        }
 
+        const schema = z.object({
+            colors: z.array(z.string().regex(/^#[0-9a-fA-F]{6}$/i)),
+            description: z.string(),
+        })
+        
         console.log("===================================")
         console.log("prompting...", prompt.join("\n"))
         console.log("===================================")
 
-        const res = await this.openai.responses.create({
-            model: "gpt-4o-mini",
-            input: [
-                { role: "system", content: systemPrompt },
-                { role: "user", content: prompt.join("\n") }
-            ],
-            text: { 
-                format: {
-                    type: "json_schema", 
-                    name: "gradient_analysis",
-                    schema,
-                } 
-            },
-        });
+        try {          
+            
+                    const res = await this.openai.beta.chat.completions.parse({
+                        model: "gpt-4o-mini",
+                        messages: [
+                            { role: "system", content: systemPrompt },
+                            { role: "user", content: prompt.join("\n") }
+                        ],
+                        response_format: zodResponseFormat(schema, "gradient_analysis"),
+                    });
 
+                    console.log("===================================")
+                    console.log("finishing", res.choices[0].message.parsed)
+                    console.log("===================================")
+            
+                    console.log("done")
+
+                    const analysis: Analysis = res.choices[0].message.parsed as Analysis;
+            
+                    return analysis;
+        } catch(e) {
         console.log("===================================")
-        console.log("finishing", res.output_text)
+        console.log("error...", e)
         console.log("===================================")
-
-        console.log("done")
-
-        const analysis: Analysis = JSON.parse(res.output_text || "{}");
-
-        return analysis;
+            return {
+                colors: [],
+                description: "",
+            }
+        }
     }
 }
