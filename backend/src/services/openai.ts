@@ -47,7 +47,7 @@ export class OpenAIService {
     
             console.log("done")
 
-            const analysis: Analysis = res.choices[0].message.parsed as Analysis;
+            const analysis = res.choices[0].message.parsed as Analysis;
     
             return analysis;
         } catch(e) {
@@ -70,6 +70,11 @@ export class OpenAIService {
                     "#000000",
                 ],
                 description: "something went wrong here.",
+                ranking: {
+                    description: "something went wrong here.",
+                    letter_ranking: "F",
+                    number_ranking: 0,
+                }
             }
         }
     }
