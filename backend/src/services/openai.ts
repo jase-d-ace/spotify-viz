@@ -31,30 +31,29 @@ export class OpenAIService {
         console.log("prompting...", prompt.join("\n"))
         console.log("===================================")
 
-        try {          
-            
-                    const res = await this.openai.beta.chat.completions.parse({
-                        model: "gpt-4o-mini",
-                        messages: [
-                            { role: "system", content: systemPrompt },
-                            { role: "user", content: prompt.join("\n") }
-                        ],
-                        response_format: zodResponseFormat(schema, "gradient_analysis"),
-                    });
+        try {             
+            const res = await this.openai.beta.chat.completions.parse({
+                model: "gpt-4o-mini",
+                messages: [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: prompt.join("\n") }
+                ],
+                response_format: zodResponseFormat(schema, "gradient_analysis"),
+            });
 
-                    console.log("===================================")
-                    console.log("finishing", res.choices[0].message.parsed)
-                    console.log("===================================")
-            
-                    console.log("done")
+            console.log("===================================")
+            console.log("finishing", res.choices[0].message.parsed)
+            console.log("===================================")
+    
+            console.log("done")
 
-                    const analysis: Analysis = res.choices[0].message.parsed as Analysis;
-            
-                    return analysis;
+            const analysis: Analysis = res.choices[0].message.parsed as Analysis;
+    
+            return analysis;
         } catch(e) {
-        console.log("===================================")
-        console.log("error...", e)
-        console.log("===================================")
+            console.log("===================================")
+            console.log("error...", e)
+            console.log("===================================")
             return {
                 colors: [],
                 description: "",
