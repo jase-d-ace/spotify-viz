@@ -55,8 +55,21 @@ export class OpenAIService {
             console.log("error...", e)
             console.log("===================================")
             return {
-                colors: [],
-                description: "",
+                colors: [
+                    "#000000",
+                    "#000000",
+                    "#000000",
+                    "#000000",
+                    "#000000",
+                    "#000000",
+                    "#000000",
+                    "#000000",
+                    "#000000",
+                    "#000000",
+                    "#000000",
+                    "#000000",
+                ],
+                description: "something went wrong here.",
             }
         }
     }
