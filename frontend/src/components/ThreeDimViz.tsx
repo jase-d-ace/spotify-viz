@@ -1,5 +1,5 @@
 import { useRef, useMemo } from "react";
-import { Canvas, useFrame, extend } from "@react-three/fiber";
+import { Canvas, extend } from "@react-three/fiber";
 import { shaderMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import vertShader from "../shaders/blob.vert.glsl";
@@ -33,13 +33,6 @@ extend({ BlobMaterial });
 function BlobPlane( { colors }: { colors: string[] } ) {
     const colorVecs = useMemo(() => colors.map((color: string) => new THREE.Color(color)), [colors]);
     const matRef = useRef<any>(null); 
-    useFrame(({ clock }) => {
-        if (matRef.current) {
-            matRef.current.u_time = clock.getElapsedTime();
-            matRef.current.u_colorCount = colorVecs.length;
-            matRef.current.u_colors = colorVecs;
-        };
-    });
 
     return (
         <mesh>
