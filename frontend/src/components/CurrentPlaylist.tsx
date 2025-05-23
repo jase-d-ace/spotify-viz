@@ -5,22 +5,22 @@ export default function CurrentPlaylist( {selectedPlaylist}: {selectedPlaylist: 
     const { tracks, isTracksLoading, isTracksError } = usePlaylistContext();
 
     if (isTracksLoading) return ( 
-        <div className="current-playlist">
-            <h2>Current Playlist</h2>
+        <div className="current-playlist box">
+            <h1>Current Playlist</h1>
             <Loading />
         </div>
     );
 
     if (isTracksError) return (
-        <div className="current-playlist">
+        <div className="current-playlist box">
             <h2>Error</h2>
         </div>
     );
 
     return (
-        <div className="current-playlist">
+        <div className="current-playlist box">
             <h2>Current Playlist</h2>
-            {selectedPlaylist && <p>{selectedPlaylist.name}</p>}
+            {selectedPlaylist && <h2>{selectedPlaylist.name}</h2>}
             {
                 tracks?.items.map((track: any) => (
                     <div key={track.track.id}>
