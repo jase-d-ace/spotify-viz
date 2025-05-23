@@ -6,7 +6,7 @@ export default function CurrentPlaylist( {selectedPlaylist}: {selectedPlaylist: 
 
     if (isTracksLoading) return ( 
         <div className="current-playlist box">
-            <h2>Current Playlist</h2>
+            <h1>Current Playlist</h1>
             <Loading />
         </div>
     );
@@ -20,7 +20,7 @@ export default function CurrentPlaylist( {selectedPlaylist}: {selectedPlaylist: 
     return (
         <div className="current-playlist box">
             <h2>Current Playlist</h2>
-            {selectedPlaylist && <p>{selectedPlaylist.name}</p>}
+            {selectedPlaylist && <h2>{selectedPlaylist.name}</h2>}
             {
                 tracks?.items.map((track: any) => (
                     <div key={track.track.id}>

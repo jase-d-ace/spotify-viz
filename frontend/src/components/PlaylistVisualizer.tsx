@@ -30,7 +30,6 @@ export default function PlaylistVisualizer() {
     return (
         <div className="playlist-visualizer box">
             <main className="visualizer-container">
-                <h2>Playlist Visualizer</h2>
                 <header className="visualizer-header">
                     <VisualizerNav 
                         setActiveTab={setActiveTab}
@@ -39,7 +38,6 @@ export default function PlaylistVisualizer() {
                 <section className="visualizer-content">
                     {loading && <Loading />}
                     {analysis && activeTab == "visualizer" && <ThreeDimViz colors={analysis.colors} />}
-                    {analysis && activeTab == "analysis" && <RankCheck rankings={analysis.ranking} />}
                     <button 
                         onClick={() => handleClick()}
                         disabled={loading}
