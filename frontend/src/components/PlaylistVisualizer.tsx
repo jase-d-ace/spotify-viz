@@ -5,7 +5,7 @@ import type { Analysis } from "@types";
 import VisualizerNav from "./VisualizerNav";
 import Loading from "./Loading";
 import RankCheck from "./RankCheck";
-import Gradient from "./Gradient";
+import ThreeDimViz from "./ThreeDimViz";
 
 export default function PlaylistVisualizer() {
 
@@ -13,7 +13,7 @@ export default function PlaylistVisualizer() {
     const [loading, setLoading] = useState<boolean>(false);
     const [activeTab, setActiveTab] = useState<string>("visualizer");
 
-    const { tracks } = usePlaylistContext();
+    const { tracks, isTracksError } = usePlaylistContext();
     const analysisService = new AnalysisService();
 
     const tracksList = tracks?.items.map((track) => (`title: ${track.track.name} artist: ${track.track.artists[0].name}`));
@@ -21,15 +21,16 @@ export default function PlaylistVisualizer() {
     const handleClick = async () => {
         if (!tracksList) return;
         setLoading(true);
+        setAnalysis(null);
         const res = await analysisService.getTracksAnalysis(tracksList);
         setAnalysis(res.analysis);
         setLoading(false);
     }
 
+
     return (
-        <div className="playlist-visualizer">
+        <div className="playlist-visualizer box">
             <main className="visualizer-container">
-                <h2>Playlist Visualizer</h2>
                 <header className="visualizer-header">
                     <VisualizerNav 
                         setActiveTab={setActiveTab}
@@ -37,8 +38,9 @@ export default function PlaylistVisualizer() {
                 </header>
                 <section className="visualizer-content">
                     {loading && <Loading />}
-                    {analysis && activeTab == "visualizer" && <Gradient colors={analysis.colors} description={analysis.description} />}
-                    {analysis && activeTab == "analysis" && <RankCheck rankings={analysis.ranking} />}
+                    {/** TODO: Create error component */}
+                    {isTracksError && <p>Error loading tracks</p>}
+                    {analysis && activeTab == "visualizer" && <ThreeDimViz colors={analysis.colors} />}
                     <button 
                         onClick={() => handleClick()}
                         disabled={loading}

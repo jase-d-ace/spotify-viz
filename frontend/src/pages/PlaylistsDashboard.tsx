@@ -17,10 +17,7 @@ export default function PlaylistsDashboard() {
 
     return (
         <div className="playlists-dashboard">
-            <div className="header">
-                <h1>Playlists</h1>
-            </div>
-            <main className="playlist-dashboard-main">
+            <main className="playlist-dashboard-main box">
                 <section className="main-content">
                     <CurrentPlaylist selectedPlaylist={selectedPlaylist} />
                     <div className="chart-container">

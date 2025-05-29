@@ -1,65 +1,85 @@
 #root {
   max-width: 1280px;
-  margin: 0 auto;
+  margin: 0 0;
   padding: 2rem;
   text-align: center;
 }
 
+.box {
+  border-radius: 5px;
+  border: 1px solid #EFF0F4;
+}
+
 main.playlist-dashboard-main {
-  border: 1px solid pink;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background-color: #1a1a1a;
+  justify-content: space-between;
+  background-color: #323441;
+  margin-left: 20em;
   color: #fff;
   padding: 2rem;
-  width: 80em;
+  width: 110em;
 
   section.main-content {
-    border: 1px solid red;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-bottom: 1em;
     
     div.current-playlist {
-      border: 1px solid blue;
       width: 20em;
       height: 40em;
       overflow-y: scroll;
       display: flex;
       flex-direction: column;
       align-items: center;
+      margin-right: 1em;
     }
 
     div.playlist-visualizer {
-      border: 1px solid yellow;
       width: 60em;
       height: 40em;
       display: flex;
+
+      section.visualizer-content {
+        height: 30em;
+        width: 60em;
+
+        div.three-d-viz-canvas {
+          height: 60em;
+          width: 60em;
+
+          div > canvas.three-dim-viz-canvas {
+            height: 40em;
+            width: 92em;
+            margin-left: -16em;
+          }
+        }
+      }
     }
     
   }
   section.other-playlists {
-    border: 1px solid green;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 100%;
+    width: 81em;
     overflow-x: scroll;
 
     div.card-container {
-      border: 1px solid orange;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+      align-items: center;
       overflow-x: scroll;
+      height: 15em;
 
       div.playlist-card {
-        border: 1px solid purple;
-        height: 10em;
-        width: 10em;
+        height: 12em;
+        width: 18em;
         cursor: pointer;
+        margin-left: 1em;
         display: flex;
         flex-direction: column;
         align-items: center;
