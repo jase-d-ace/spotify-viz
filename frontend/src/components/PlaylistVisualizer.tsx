@@ -13,7 +13,7 @@ export default function PlaylistVisualizer() {
     const [loading, setLoading] = useState<boolean>(false);
     const [activeTab, setActiveTab] = useState<string>("visualizer");
 
-    const { tracks } = usePlaylistContext();
+    const { tracks, isTracksError } = usePlaylistContext();
     const analysisService = new AnalysisService();
 
     const tracksList = tracks?.items.map((track) => (`title: ${track.track.name} artist: ${track.track.artists[0].name}`));
@@ -21,6 +21,7 @@ export default function PlaylistVisualizer() {
     const handleClick = async () => {
         if (!tracksList) return;
         setLoading(true);
+        setAnalysis(null);
         const res = await analysisService.getTracksAnalysis(tracksList);
         setAnalysis(res.analysis);
         setLoading(false);
@@ -37,6 +38,8 @@ export default function PlaylistVisualizer() {
                 </header>
                 <section className="visualizer-content">
                     {loading && <Loading />}
+                    {/** TODO: Create error component */}
+                    {isTracksError && <p>Error loading tracks</p>}
                     {analysis && activeTab == "visualizer" && <ThreeDimViz colors={analysis.colors} />}
                     <button 
                         onClick={() => handleClick()}
