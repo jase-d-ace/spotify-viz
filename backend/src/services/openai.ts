@@ -39,24 +39,24 @@ export class OpenAIService {
                     { role: "user", content: prompt.join("\n") }
                 ],
                 response_format: zodResponseFormat(schema, "gradient_analysis"),
+                max_tokens: 4096,
             });
-    
 
-            console.log("===================================")
-            console.log("finishing", res.choices[0].message.parsed)
-            console.log("===================================")
-    
-            console.log("done")
+            console.log("===================================");
+            console.log("finishing", res.choices[0].message.parsed);
+            console.log("===================================");
+            console.log("done");
             const analysis = res.choices[0].message.parsed as Analysis;
 
-            const response = {
+            return {
                 analysis,
                 status: 200,
             };
-    
-            return response;
         } catch(e) {
-            console.log("error", e)
+            console.log("===================================");
+            console.log("error", e);
+            console.log("===================================");
+            console.log("done with error");
             return {
                 analysis: {
                     colors: [],

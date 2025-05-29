@@ -9,9 +9,10 @@ export class AnalysisController {
         const analysis: AnalysisResponse = await this.openAIService.analyzePlaylist(tracks);
 
         if(analysis.status !== 200) {
-            res.status(500).json({ analysis, error: "Something went wrong" })
+            res.status(500).json({ ...analysis, error: "Something went wrong" })
+        } else {
+            res.json({ ...analysis });
         }
         
-        res.json({ analysis });
     }
 }
