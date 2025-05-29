@@ -1,5 +1,7 @@
 import OpenAI from "openai";
-import type { Analysis } from "@types";
+import type { Analysis, AnalysisResponse } from "@types";
+import { zodResponseFormat } from "openai/helpers/zod";
+import { z } from "zod";
 
 export class OpenAIService {
     private openai: OpenAI;
@@ -8,7 +10,7 @@ export class OpenAIService {
         this.openai = new OpenAI({ apiKey });
     }
 
-    async analyzePlaylist(prompt: string[]): Promise<Analysis> {
+    async analyzePlaylist(prompt: string[]): Promise<AnalysisResponse> {
         const systemPrompt = `
             Here's a playlist. Given this list, generate a gradient of 12 colors that represent the "vibes" of the song list. the vibe can be measured on some combination of the lyrics, the tempo, and the genre. anything that informs the message or general emotions of the songs. The colors should also follow a cohesive color scheme. Pick one color that represents the main theme of the whole and then pick 11 complementary colors that accent and highlight the main theme.
             Tell me what you think the vibe of the playlist is and highlight what emotions, messages, and high-level themes of the songs and how they shape the vibe of the playlist as a whole. Keep your tone light, friendly, and fun. Your analysis should sound casual and conversational, sounding like you're speaking to a friend. Give your analysis in the form of an opinion
@@ -19,66 +21,55 @@ export class OpenAIService {
             Any commentary or analysis for the gradient should go in the "description" field, and any commentary or analysis of the ranking should go in the "ranking.description" field. Letter Rankings should go in the "ranking.letter_ranking" field and number rankings should go in the "ranking.number_ranking" field.
             Do not respond using markdown in any of the fields.
         `
-        const schema = {
-            type: "object",
-            properties: {
-                colors: {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    }
-                },
-                description: {
-                    type: "string"
-                },
-                ranking: {
-                    type: "object",
-                    properties: {
-                        "letter_ranking": { 
-                            type: "string"
-                        },
-                        "number_ranking": {
-                            type: "number"
-                        },
-                        "description": {
-                            type: "string"
-                        }
-                    },
-                    required: ["letter_ranking", "number_ranking", "description"],
-                    additionalProperties: false,
-                }
-            },
-            required: ["colors", "description", "ranking"],
-            additionalProperties: false,
-        }
+
+        const schema = z.object({
+            colors: z.array(z.string().regex(/^#[0-9A-F]{6}$/i)),
+            description: z.string(),
+        })
 
         console.log("===================================")
         console.log("prompting...", prompt.join("\n"))
         console.log("===================================")
+        try {          
+    
+            const res = await this.openai.beta.chat.completions.parse({
+                model: "gpt-4o-mini",
+                messages: [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: prompt.join("\n") }
+                ],
+                response_format: zodResponseFormat(schema, "gradient_analysis"),
+                max_tokens: 4096,
+            });
 
-        const res = await this.openai.responses.create({
-            model: "gpt-4o-mini",
-            input: [
-                { role: "system", content: systemPrompt },
-                { role: "user", content: prompt.join("\n") }
-            ],
-            text: { 
-                format: {
-                    type: "json_schema", 
-                    name: "gradient_analysis",
-                    schema,
-                } 
-            },
-        });
+            console.log("===================================");
+            console.log("finishing", res.choices[0].message.parsed);
+            console.log("===================================");
+            console.log("done");
+            const analysis = res.choices[0].message.parsed as Analysis;
 
-        console.log("===================================")
-        console.log("finishing", res.output_text)
-        console.log("===================================")
-
-        console.log("done")
-
-        const analysis: Analysis = JSON.parse(res.output_text || "{}");
-
-        return analysis;
+            return {
+                analysis,
+                status: 200,
+            };
+        } catch(e) {
+            console.log("===================================");
+            console.log("error", e);
+            console.log("===================================");
+            console.log("done with error");
+            return {
+                analysis: {
+                    colors: [],
+                    description: "Something went wrong",
+                    ranking: {
+                        description: "Something went wrong",
+                        letter_ranking: "F",
+                        number_ranking: 0,
+                    }
+                },
+                error: e as string,
+                status: 500,
+            }
+        }
     }
 }

@@ -14,4 +14,6 @@ export interface Analysis {
 
 export interface AnalysisResponse {
   analysis: Analysis;
+  status: number;
+  error?: string;
 }
