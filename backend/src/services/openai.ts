@@ -50,6 +50,7 @@ export class OpenAIService {
 
             return {
                 analysis,
+                error: null,
                 status: 200,
             };
         } catch(e) {
@@ -67,6 +68,7 @@ export class OpenAIService {
                         number_ranking: 0,
                     }
                 },
+                error: e,
                 status: 500,
             }
         }
