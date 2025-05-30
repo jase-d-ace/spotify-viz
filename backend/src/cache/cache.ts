@@ -1,4 +1,5 @@
 import { LRUCache } from "lru-cache";
+<<<<<<< HEAD
 import { Analysis } from "@types";
 import { logMessage } from "../services/logging";
 
@@ -19,3 +20,11 @@ export const cacheResponse = (key: string, value: Analysis) => {
 };
 
 export const getCachedResponse = (key: string): Analysis | undefined => cache.get(JSON.stringify(key));
+=======
+import { AnalysisResponse } from "@types";
+
+const cache = new LRUCache<string, AnalysisResponse>({
+  max: 100,
+  ttl: 1000 * 60 * 5, // 5 minutes
+});
+>>>>>>> 30282a4 (start building a cache)
