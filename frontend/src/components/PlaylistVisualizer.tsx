@@ -4,7 +4,6 @@ import { AnalysisService } from "../services/analysis";
 import type { Analysis } from "@types";
 import VisualizerNav from "./VisualizerNav";
 import Loading from "./Loading";
-import RankCheck from "./RankCheck";
 import ThreeDimViz from "./ThreeDimViz";
 
 export default function PlaylistVisualizer() {
