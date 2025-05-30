@@ -2,7 +2,6 @@
 
 export interface Analysis {
   colors: string[];
-  description: string;
 }
 
 export interface AnalysisResponse {
