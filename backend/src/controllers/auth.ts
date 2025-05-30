@@ -29,7 +29,7 @@ export class AuthController {
             maxAge: 30 * 24 * 60 * 60 * 1000,
             sameSite: "lax",
         });
-        res.redirect(`${process.env.FRONTEND_URL}/profile`);
+        res.redirect(`${process.env.FRONTEND_URL}/playlists`);
     }
 
     async refreshAccessToken(_req: Request, res: Response) {
