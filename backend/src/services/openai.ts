@@ -10,6 +10,13 @@ export class OpenAIService {
         this.openai = new OpenAI({ apiKey });
     }
 
+    private logMessage(label: string, log: any, endMessage?: string): void {
+        console.log("===================================")
+        console.log(label, log)
+        console.log("===================================")
+        if(endMessage) console.log(endMessage)
+    }
+
     async analyzePlaylist(prompt: string[]): Promise<AnalysisResponse> {
         const systemPrompt = `
             Here's a playlist. Given this list, generate a gradient of 12 colors that represent the "vibes" of the song list. the vibe can be measured on some combination of the lyrics, the tempo, and the genre. anything that informs the message or general emotions of the songs. The colors should also follow a cohesive color scheme. Pick one color that represents the main theme of the whole and then pick 11 complementary colors that accent and highlight the main theme.
@@ -27,11 +34,9 @@ export class OpenAIService {
             description: z.string(),
         })
 
-        console.log("===================================")
-        console.log("prompting...", prompt.join("\n"))
-        console.log("===================================")
-        try {          
-    
+        this.logMessage("prompting...", prompt.join("\n"))
+
+        try {           
             const res = await this.openai.beta.chat.completions.parse({
                 model: "gpt-4o-mini",
                 messages: [
@@ -41,22 +46,34 @@ export class OpenAIService {
                 response_format: zodResponseFormat(schema, "gradient_analysis"),
                 max_tokens: 4096,
             });
+            const analysis: Analysis | null = res.choices[0].message.parsed;
 
-            console.log("===================================");
-            console.log("finishing", res.choices[0].message.parsed);
-            console.log("===================================");
-            console.log("done");
-            const analysis = res.choices[0].message.parsed as Analysis;
+            if(analysis){
+                this.logMessage("finishing", analysis, "done with success")
+                
+                return {
+                    analysis,
+                    status: 200,
+                };
+            } else {
+                this.logMessage("finishing", analysis, "done with error: no analysis")
 
-            return {
-                analysis,
-                status: 200,
-            };
+                return {
+                    analysis: { 
+                        colors: [], 
+                        description: "No Analysis Received",
+                        ranking: {
+                            description: "Something went wrong",
+                            letter_ranking: "F",
+                            number_ranking: 0,
+                        }
+                    },
+                    status: 500
+                }
+            }
         } catch(e) {
-            console.log("===================================");
-            console.log("error", e);
-            console.log("===================================");
-            console.log("done with error");
+            this.logMessage("finishing", e, "done with error")
+
             return {
                 analysis: {
                     colors: [],
