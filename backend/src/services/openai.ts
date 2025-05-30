@@ -3,6 +3,7 @@ import type { Analysis, AnalysisResponse } from "@types";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { logMessage } from "./logging";
 import { z } from "zod";
+import { cacheResponse, getCachedResponse } from "../cache/cache";
 
 export class OpenAIService {
     private openai: OpenAI;
@@ -20,8 +21,17 @@ export class OpenAIService {
         `
 
         const schema = z.object({
-            colors: z.array(z.string().regex(/^#[0-9A-F]{6}$/i)),
+            colors: z.array(z.string().regex(/^#[0-9a-fA-F]{6}$/i)),
         })
+
+        const cacheKey = JSON.stringify(prompt);
+        const cachedResponse = getCachedResponse(cacheKey);
+        if (cachedResponse) {
+            return {
+                analysis: cachedResponse,
+                status: 200,
+            };
+        }
 
         logMessage("prompting...", prompt.join("\n"))
 
@@ -37,8 +47,10 @@ export class OpenAIService {
             });
             const analysis: Analysis | null = res.choices[0].message.parsed;
 
-            if(analysis){
+            if (analysis) {
                 logMessage("finishing", analysis, "done with success")
+
+                cacheResponse(cacheKey, analysis);
                 
                 return {
                     analysis,
