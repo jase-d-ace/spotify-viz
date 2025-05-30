@@ -8,8 +8,9 @@ export interface Ranking {
 
 export interface Analysis {
   colors: string[];
-  description: string
-  ranking: Ranking;
+  description: string;
+  // ToDo: deprecate Ranking
+  ranking?: Ranking;
 }
 
 export interface AnalysisResponse {
