@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import type { Analysis, AnalysisResponse } from "@types";
 import { zodResponseFormat } from "openai/helpers/zod";
+import { logMessage } from "./logging";
 import { z } from "zod";
 
 export class OpenAIService {
@@ -8,13 +9,6 @@ export class OpenAIService {
     
     constructor(apiKey: string) {
         this.openai = new OpenAI({ apiKey });
-    }
-
-    private logMessage(label: string, log: any, endMessage?: string): void {
-        console.log("===================================")
-        console.log(label, log)
-        console.log("===================================")
-        if(endMessage) console.log(endMessage)
     }
 
     async analyzePlaylist(prompt: string[]): Promise<AnalysisResponse> {
@@ -29,7 +23,7 @@ export class OpenAIService {
             colors: z.array(z.string().regex(/^#[0-9A-F]{6}$/i)),
         })
 
-        this.logMessage("prompting...", prompt.join("\n"))
+        logMessage("prompting...", prompt.join("\n"))
 
         try {           
             const res = await this.openai.beta.chat.completions.parse({
@@ -44,14 +38,14 @@ export class OpenAIService {
             const analysis: Analysis | null = res.choices[0].message.parsed;
 
             if(analysis){
-                this.logMessage("finishing", analysis, "done with success")
+                logMessage("finishing", analysis, "done with success")
                 
                 return {
                     analysis,
                     status: 200,
                 };
             } else {
-                this.logMessage("finishing", analysis, "done with error: no analysis")
+                logMessage("finishing", analysis, "done with error: no analysis")
 
                 return {
                     analysis: { 
@@ -61,7 +55,7 @@ export class OpenAIService {
                 }
             }
         } catch(e) {
-            this.logMessage("finishing", e, "done with error")
+           logMessage("finishing", e, "done with error")
 
             return {
                 analysis: {
