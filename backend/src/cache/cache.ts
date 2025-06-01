@@ -4,7 +4,7 @@ import { logMessage } from "../services/logging";
 
 const cache = new LRUCache<string, Analysis>({
   max: 100,
-  ttl: 1000 * 60 * 5, // 5 minutes
+  ttl: 1000 * 60 * 60 * 24, // One day
   onInsert: (value, key, reason) => {
     logMessage("cache", `Inserted ${JSON.stringify(key)} into cache`, JSON.stringify(value))
   },
