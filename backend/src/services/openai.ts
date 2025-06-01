@@ -12,7 +12,7 @@ export class OpenAIService {
         this.openai = new OpenAI({ apiKey });
     }
 
-    async analyzePlaylist(prompt: string[]): Promise<AnalysisResponse> {
+    async analyzePlaylist(prompt: string[], id: string): Promise<AnalysisResponse> {
         const systemPrompt = `
             Here's a playlist. Given this list, generate a gradient of 12 colors that represent the "vibes" of the song list. the vibe can be measured on some combination of the lyrics, the tempo, and the genre. anything that informs the message or general emotions of the songs. The colors should also follow a cohesive color scheme. Pick one color that represents the main theme of the whole and then pick 11 complementary colors that accent and highlight the main theme.
             Tell me what you think the vibe of the playlist is and highlight what emotions, messages, and high-level themes of the songs and how they shape the vibe of the playlist as a whole. Keep your tone light, friendly, and fun. Your analysis should sound casual and conversational, sounding like you're speaking to a friend. Give your analysis in the form of an opinion
@@ -24,8 +24,7 @@ export class OpenAIService {
             colors: z.array(z.string().regex(/^#[0-9a-fA-F]{6}$/i)),
         })
 
-        const cacheKey = JSON.stringify(prompt);
-        const cachedResponse = getCachedResponse(cacheKey);
+        const cachedResponse = getCachedResponse(id);
         if (cachedResponse) {
             return {
                 analysis: cachedResponse,
@@ -50,7 +49,7 @@ export class OpenAIService {
             if (analysis) {
                 logMessage("finishing", analysis, "done with success")
 
-                cacheResponse(cacheKey, analysis);
+                cacheResponse(id, analysis);
                 
                 return {
                     analysis,
