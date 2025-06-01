@@ -14,6 +14,7 @@ At full power, this app will let you visualize your Spotify playlists in the sam
 - **Backend**: Node.js, Express, TypeScript
 - **AI**: OpenAI API
 - **Music**: Spotify API
+- **Caching**: `lru-cache`
 - **3D Rendering** Three.js, GLSL
   - **NB**: when installing `vite-plugin-glslify`, until something gets fixed in their code, you need to install this using `npm install vite-plugin-glslify --legacy-peer-deps` to ensure that this plugin can support `vite 6`.
 
@@ -45,7 +46,7 @@ Run two terminals, one for the frontend and one for the backend.
 
 ### Frontend
 * `cd frontend`
-* `npm install`
+* `npm install --legacy-peer-deps`
 * `npm run dev`
 
 ### Backend
