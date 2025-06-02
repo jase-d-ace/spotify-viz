@@ -1,7 +1,14 @@
 import { createContext, useContext, useState } from "react";
 import { AuthService } from "../services/auth";
-import { AuthState } from "../types/auth";
 import { useQuery } from "@tanstack/react-query"
+import type { UserProfile, UserProfileResponse } from "@backend/types";
+
+ interface AuthState {
+    isAuthenticated: boolean;
+    user: UserProfile | null;
+    error?: string | null;
+}
+
 interface AuthContextType {
     state: AuthState;
     login: () => Promise<void>;
@@ -31,10 +38,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const authService = new AuthService();
 
-    const { data: _user, isLoading, isError } = useQuery({
+    const { isLoading, isError } = useQuery({
         queryKey: ['user'],
         queryFn: async () => {
-            const user = await authService.logIntoSpotify();
+            const user: UserProfileResponse = await authService.logIntoSpotify();
             setCurrentUser({
                 ...currentUser,
                 isAuthenticated: true,

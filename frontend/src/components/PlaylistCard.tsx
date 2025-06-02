@@ -1,4 +1,4 @@
-import type { Playlist } from "@spotify/web-api-ts-sdk";
+import type { Playlist } from "@backend/types"
 
 export default function PlaylistCard( { playlist, onClick }: { playlist: Playlist, onClick: () => void }) {
     return (

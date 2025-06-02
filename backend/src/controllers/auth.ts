@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { SpotifyService } from "../services/spotify";
+import type { UserProfile } from "@types";
 
 export class AuthController {
     constructor(private spotifyService: SpotifyService) {
@@ -16,14 +17,14 @@ export class AuthController {
             res.status(400).json({ error: "Invalid code" });
             return;
         }
-        const { accessToken, refreshToken, expires_in } = await this.spotifyService.getTokens(code as string);
-        res.cookie("accesstoken", accessToken as string, {
+        const { accessToken, refreshToken, expires_in } = await this.spotifyService.getTokens(code);
+        res.cookie("accesstoken", accessToken, {
             httpOnly: true,
             secure: false,
             maxAge: expires_in * 1000,
             sameSite: "lax",
         });
-        res.cookie("refreshtoken", refreshToken as string, {
+        res.cookie("refreshtoken", refreshToken, {
             httpOnly: true,
             secure: false,
             maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -34,7 +35,7 @@ export class AuthController {
 
     async refreshAccessToken(_req: Request, res: Response) {
         const accessToken = await this.spotifyService.refreshAccessToken();
-        res.cookie("accesstoken", accessToken as string, {
+        res.cookie("accesstoken", accessToken, {
             httpOnly: true,
             secure: false,
             maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -44,12 +45,13 @@ export class AuthController {
     }
 
     async logIntoSpotify(req: Request, res: Response) {
-        const accessToken = req.cookies.accesstoken;
-        if (!accessToken) {
+        const accessToken = req.cookies?.accessToken;
+        if (!accessToken || typeof accessToken !== "string")  {
             res.status(401).json({ error: "Unauthorized" });
             return;
         }
-        const user = await this.spotifyService.getMyProfile(accessToken);
+
+        const user: UserProfile = await this.spotifyService.getMyProfile(accessToken);
         res.json({ user });
     }
 }

@@ -1,4 +1,4 @@
-import { AuthTokens } from "../types/auth";
+import type { AuthTokens, UserProfileResponse } from "@backend/types";
 
 export class AuthService {
     async initiateLogin(): Promise<void> {
@@ -18,7 +18,7 @@ export class AuthService {
         }
     }
     
-    async logIntoSpotify() {
+    async logIntoSpotify(): Promise<UserProfileResponse> {
         const res = await fetch(`http://127.0.0.1:3000/api/auth/spotify/me`, {
             credentials: "include",
             headers: {
