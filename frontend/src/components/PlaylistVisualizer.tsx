@@ -12,16 +12,16 @@ export default function PlaylistVisualizer() {
     const [loading, setLoading] = useState<boolean>(false);
     const [activeTab, setActiveTab] = useState<string>("visualizer");
 
-    const { tracks, isTracksError } = usePlaylistContext();
+    const { selectedPlaylist, tracks, isTracksError } = usePlaylistContext();
     const analysisService = new AnalysisService();
 
     const tracksList = tracks?.items.map((track) => (track.track ? `title: ${track.track.name} artist: ${track.track.artists[0].name}` : ""));
 
-    const handleClick = async () => {
+    const handleClick = async (): Promise<void> => {
         if (!tracksList) return;
         setLoading(true);
         setAnalysis(null);
-        const res = await analysisService.getTracksAnalysis(tracksList);
+        const res = await analysisService.getTracksAnalysis({tracksList, id: selectedPlaylist?.id});
         setAnalysis(res.analysis);
         setLoading(false);
     }
