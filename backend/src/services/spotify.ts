@@ -1,4 +1,5 @@
 import SpotifyWebApi from "spotify-web-api-node";
+import type { Playlists, Tracks, UserProfile, AuthTokens } from "@types"
 
 export class SpotifyService {
     private spotifyApi: SpotifyWebApi;
@@ -39,7 +40,7 @@ export class SpotifyService {
         return this.spotifyApi.createAuthorizeURL(scopes, state);
     }
 
-    async getTokens(code: string): Promise<{ accessToken: string, refreshToken: string, expires_in: number }> {
+    async getTokens(code: string): Promise<AuthTokens> {
         try {
             const data = await this.spotifyApi.authorizationCodeGrant(code);
             return {
@@ -57,7 +58,7 @@ export class SpotifyService {
         }
     }
 
-    async getMyProfile(accessToken: string): Promise<SpotifyApi.CurrentUsersProfileResponse> {
+    async getMyProfile(accessToken: string): Promise<UserProfile> {
         if (!this.isTokenValid()) {
             const newToken = await this.spotifyApi.refreshAccessToken();
             this.expiry = Date.now() + 3600 * 1000;
@@ -72,7 +73,7 @@ export class SpotifyService {
     // spotify playlist functions //
     ////////////////////////////////
 
-    async getPlaylists(accessToken: string): Promise<SpotifyApi.ListOfUsersPlaylistsResponse> {
+    async getPlaylists(accessToken: string): Promise<Playlists> {
         if (!this.isTokenValid()) {
             const newToken = await this.spotifyApi.refreshAccessToken();
             this.expiry = Date.now() + 3600 * 1000;
@@ -83,7 +84,7 @@ export class SpotifyService {
         return data.body;
     }
 
-    async getTracks(accessToken: string, playlistId: string): Promise<SpotifyApi.PlaylistTrackResponse> {
+    async getTracks(accessToken: string, playlistId: string): Promise<Tracks> {
         if (!this.isTokenValid()) {
             const newToken = await this.spotifyApi.refreshAccessToken();
             this.expiry = Date.now() + 3600 * 1000;

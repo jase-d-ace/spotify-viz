@@ -1,20 +1,15 @@
 import { createContext, useContext, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { SpotifyService } from "../services/spotify";
-import type {
-  PlaylistedTrack,
-  Track,
-  Playlist,
-  Page,
-} from "@spotify/web-api-ts-sdk";
+import type { Tracks, Playlist, Playlists} from "@backend/types"
 
 interface PlaylistContextType {
   selectedPlaylist: Playlist | null;
   setSelectedPlaylist: (playlist: Playlist | null) => void;
-  playlists: Page<Playlist> | null;
+  playlists?: Playlists | null;
   isLoading: boolean;
   isError: boolean;
-  tracks: Page<PlaylistedTrack<Track>> | null;
+  tracks?: Tracks | null;
   isTracksLoading: boolean;
   isTracksError: boolean;
 }
@@ -37,20 +32,21 @@ export const PlaylistProvider = ( { children }: { children: React.ReactNode } ) 
     const spotifyService = new SpotifyService();
     const { data: playlists, isLoading, isError } = useQuery({
         queryKey: ['playlists'],
-        queryFn: async () => {
-            const playlists = await spotifyService.getPlaylists()
-            setSelectedPlaylist(playlists.items[0] || null)
+        queryFn: async (): Promise<Playlists | null> => {
+            const { playlists } = await spotifyService.getPlaylists()
+            setSelectedPlaylist(playlists?.items[0] || null)
             setIsInitialLoad(false);
-            return playlists
+            return playlists || null
         },
         enabled: isInitialLoad // coerce the presnce of selectedPlaylist into a boolean
     })
 
     const { data: tracks, isLoading: isTracksLoading, isError: isTracksError } = useQuery({
         queryKey: ['tracks', selectedPlaylist?.id],
-        queryFn: async () => {
+        queryFn: async (): Promise<Tracks | null> => {
             if (!selectedPlaylist) return null
-            return await spotifyService.getTracks(selectedPlaylist.id);
+            const { tracks } = await spotifyService.getTracks(selectedPlaylist.id);
+            return tracks || null;
         },
         enabled: Boolean(selectedPlaylist)
     })

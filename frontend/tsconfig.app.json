@@ -22,7 +22,8 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
-      "@types": ["../types/index.ts"],
+      "@types": ["./src/types/index.ts"],
+      "@backend/types": ["../backend/src/types/index.ts"]
     }
   },
   "include": ["src"]

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { usePlaylistContext } from "../contexts/PlaylistContext";
 import { AnalysisService } from "../services/analysis";
-import type { Analysis } from "@types";
+import type { Analysis } from "@backend/types";
 import VisualizerNav from "./VisualizerNav";
 import Loading from "./Loading";
 import ThreeDimViz from "./ThreeDimViz";
@@ -15,7 +15,7 @@ export default function PlaylistVisualizer() {
     const { selectedPlaylist, tracks, isTracksError } = usePlaylistContext();
     const analysisService = new AnalysisService();
 
-    const tracksList = tracks?.items.map((track) => (`title: ${track.track.name} artist: ${track.track.artists[0].name}`));
+    const tracksList = tracks?.items.map((track) => (track.track ? `title: ${track.track.name} artist: ${track.track.artists[0].name}` : ""));
 
     const handleClick = async (): Promise<void> => {
         if (!tracksList) return;

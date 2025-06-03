@@ -1,4 +1,4 @@
-import type { AnalysisResponse } from "@types";
+import type { AnalysisResponse } from "@backend/types";
 
 export class AnalysisService {
     async getTracksAnalysis({ tracksList, id}: { tracksList: string[], id: string | undefined }): Promise<AnalysisResponse> {

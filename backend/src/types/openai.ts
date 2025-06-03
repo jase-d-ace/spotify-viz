@@ -1,4 +1,4 @@
-// In reference to ./backend/src/services/openai.ts schema
+// In reference to ./backend/src/services/openai.ts zod schema
 
 export interface Analysis {
   colors: string[];
