@@ -39,6 +39,9 @@ At full power, this app will let you visualize your Spotify playlists in the sam
   * `FRONTEND_URL` This is the URL of your frontend. It's used to redirect the user back to the frontend after they've logged in. Example: `http://127.0.0.1:5173`
   * `OPENAI_API_KEY` From the OpenAI dashboard.
 
+### Typescript
+* Shared types can be found in `src/types` folder in the frontend and backend. To access them, you can use the path `import { Type } from '@types'`.
+* The Frontend can access the backend types expected by the API by using the path `import { Type } from '@backend/types'`.
 
 ## Running the App
 
