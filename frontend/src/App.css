@@ -78,11 +78,23 @@ main.playlist-dashboard-main {
       div.playlist-card {
         height: 12em;
         width: 18em;
-        cursor: pointer;
         margin-left: 1em;
         display: flex;
         flex-direction: column;
         align-items: center;
+
+        header {
+          .title {
+            cursor: pointer;
+          }
+          .hovered {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .selected {
+        box-shadow: 10px 5px 5px #EFF0F4;
       }
     }
   }

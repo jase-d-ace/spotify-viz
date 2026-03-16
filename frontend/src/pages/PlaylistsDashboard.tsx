@@ -3,6 +3,7 @@ import Loading from "../components/Loading";
 import CurrentPlaylist from "../components/CurrentPlaylist";
 import PlaylistVisualizer from "../components/PlaylistVisualizer";
 import PlaylistCard from "../components/PlaylistCard";
+import type { Playlist } from "@backend/types"
 
 
 export default function PlaylistsDashboard() {
@@ -22,7 +23,7 @@ export default function PlaylistsDashboard() {
                 <section className="other-playlists">
                     <h4>Other playlists</h4>
                     <div className="card-container">
-                        {playlists?.items.map((playlist) => <PlaylistCard onClick={() => setSelectedPlaylist(playlist)} key={playlist.id} playlist={playlist} />)}
+                        {playlists?.items.map((playlist: Playlist) => <PlaylistCard onClick={() => setSelectedPlaylist(playlist)} key={playlist.id} selected={playlist.id == selectedPlaylist.id} playlist={playlist} />)}
                     </div>
                 </section>
             </main>
